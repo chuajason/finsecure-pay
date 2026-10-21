@@ -80,7 +80,7 @@ kubectl -n finsecure get pods -o wide
 kubectl -n finsecure get svc finsecure-pay        # wait until EXTERNAL-IP is assigned
 ```
 
-Capture **T3-pods.png** (2 pods Running and READY 1/1), **T3-svc.png** (Service with external IP), and **T3-external.png**: `curl http://<EXTERNAL-IP>/health` from Cloud Shell and the same URL in your browser. The response includes `apiKeyConfigured: true`, which proves the Secret was injected without showing its value.
+Capture **T3-pods.png** (2 pods Running and READY 1/1), **T3-svc.png** (Service with external IP), and **T3-external.png**: `curl http://<EXTERNAL-IP>/health` from Cloud Shell and the same URL in your browser. The response includes `apiKeyConfigured: true`, which proves the Secret was injected without showing its value. The Deployment marks the Secret as required, so a missing Secret keeps pods from starting rather than silently running without it.
 
 3.3 Probes and config evidence:
 
@@ -210,10 +210,10 @@ Capture **T6-dashboard.png** with at least request rate, validation outcomes and
 6.4 Trigger an alert deliberately:
 
 ```bash
-scripts/load.sh http://<EXTERNAL-IP> 240 80     # 80 percent rejected for 4 minutes
+scripts/load.sh http://<EXTERNAL-IP> 360 80     # 80 percent rejected for 6 minutes
 ```
 
-After about 3 minutes `FinSecurePayHighRejectionRate` goes Pending then Firing. Capture **T6-alert-firing.png** (Prometheus Alerts page, state FIRING) and **T6-alert-email.png** (the Alertmanager email in your inbox). Alternatively scale to zero for the critical alert: `kubectl -n finsecure scale deployment finsecure-pay --replicas=0`, wait 2 minutes, capture, then scale back to 2.
+After about 3 to 4 minutes `FinSecurePayHighRejectionRate` goes Pending then Firing (the rule uses a 2 minute rate and must hold for 2 more minutes; Alertmanager then waits 30 seconds before the email). Capture **T6-alert-firing.png** (Prometheus Alerts page, state FIRING) and **T6-alert-email.png** (the Alertmanager email in your inbox). Alternatively scale to zero for the critical alert: `kubectl -n finsecure scale deployment finsecure-pay --replicas=0`, wait 2 minutes, capture, then scale back to 2.
 
 6.5 Jenkins notification: the emails from 4.7 and 4.8. Capture **T6-jenkins-email.png** (a SUCCESS and a FAILED email).
 
@@ -250,7 +250,7 @@ Run it after the alert demo in 6.4 so the 80 percent rejection window is in the 
 
 ## Demo recording (10 to 15 minutes)
 
-Record with everything already deployed and green. Suggested order: repository and Actions (1 min), live /health and /validate from the external IP (1 min), pods, service, delete a pod and watch recovery (2 min), Jenkins stage view of a green run and a failed-test run (2 min), security blocked run and remediated run (2 min), Grafana dashboard and the firing alert plus the email (3 min), AI anomaly output (1 min), rollback with the parameter (1 min), close with architecture slide (1 min). `docs/DEMO_SCRIPT.md` has the narration.
+Record with everything already deployed and green. Suggested order: repository and Actions (1 min), live /health and /validate from the external IP (1 min), pods, service, delete a pod and watch recovery (2 min), Jenkins stage view of a green run and a failed-test run (2 min), security blocked run and remediated run (2 min), Grafana dashboard and the firing alert plus the email (3 min), AI anomaly output (1 min), rollback with the parameter (1 min), close with architecture slide (1 min). `docs/DEMO_SCRIPT.md` (to be written after the evidence is collected) has the narration.
 
 ---
 
@@ -264,4 +264,4 @@ scripts/gcp-pause.sh            # stop the VM, scale nodes to zero
 scripts/gcp-pause.sh resume     # bring them back (about 3 minutes)
 ```
 
-After submission: `scripts/gcp-teardown.sh` with `PROJECT_ID` still exported, then check Billing for anything still running. The firewall rule opening 8080 to the internet is a convenience for the two-week demo window and is deleted by the teardown.
+After submission: `scripts/gcp-teardown.sh` with `PROJECT_ID` still exported, then check Billing for anything still running. The Jenkins firewall rule allows port 8080 only from your public IP and from GitHub's webhook ranges, and is deleted by the teardown.

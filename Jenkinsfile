@@ -156,6 +156,8 @@ pipeline {
                 sh '''
                     gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE" --project "$GCP_PROJECT" --quiet
                     kubectl apply -f k8s/namespace.yaml
+                    kubectl -n "$K8S_NAMESPACE" get secret finsecure-pay-secrets >/dev/null 2>&1 \
+                        || { echo "Secret finsecure-pay-secrets is missing. Create it as described in docs/RUNBOOK.md step 3.2; it is never stored in Git."; exit 1; }
                     kubectl apply -f k8s/configmap.yaml
                     kubectl apply -f k8s/service.yaml
                     kubectl apply -f k8s/pdb.yaml

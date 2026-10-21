@@ -49,13 +49,21 @@ jobs:
           docker logs app | tail -5
           docker rm -f app
 
-      - name: Trivy repository scan
+      - name: Trivy repository scan (report HIGH and CRITICAL)
         uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: fs
           scanners: vuln,secret,misconfig
           severity: HIGH,CRITICAL
           exit-code: "0"
+
+      - name: Trivy repository scan (CRITICAL blocks, same policy as Jenkins)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scanners: vuln,secret
+          severity: CRITICAL
+          exit-code: "1"
 
       - name: Trivy image scan (CRITICAL blocks)
         uses: aquasecurity/trivy-action@0.28.0

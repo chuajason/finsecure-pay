@@ -41,7 +41,7 @@ spec:
                 name: finsecure-pay-config
             - secretRef:
                 name: finsecure-pay-secrets
-                optional: true
+                optional: false
           resources:
             requests:
               cpu: 200m
