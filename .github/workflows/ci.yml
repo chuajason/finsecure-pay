@@ -50,7 +50,7 @@ jobs:
           docker rm -f app
 
       - name: Trivy repository scan (report HIGH and CRITICAL)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scanners: vuln,secret,misconfig
@@ -58,7 +58,7 @@ jobs:
           exit-code: "0"
 
       - name: Trivy repository scan (CRITICAL blocks, same policy as Jenkins)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scanners: vuln,secret
@@ -66,7 +66,7 @@ jobs:
           exit-code: "1"
 
       - name: Trivy image scan (CRITICAL blocks)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: finsecure-pay:ci
           severity: CRITICAL
