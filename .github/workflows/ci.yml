@@ -55,25 +55,47 @@ jobs:
           docker logs app | tail -5
           docker rm -f app
 
-      - name: Trivy repository scan (report HIGH and CRITICAL)
+      - name: Trivy repository scan (dependencies, secrets, misconfiguration)
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scanners: vuln,secret,misconfig
           severity: HIGH,CRITICAL
+          format: json
+          output: trivy-fs.json
           exit-code: "0"
 
-      - name: Trivy repository scan (CRITICAL blocks, same policy as Jenkins)
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          scan-type: fs
-          scanners: vuln,secret
-          severity: CRITICAL
-          exit-code: "1"
-
-      - name: Trivy image scan (CRITICAL blocks)
+      - name: Trivy image scan
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: finsecure-pay:ci
-          severity: CRITICAL
-          exit-code: "1"
+          severity: HIGH,CRITICAL
+          format: json
+          output: trivy-image.json
+          exit-code: "0"
+
+      - name: Security gate (CRITICAL blocks, same policy as Jenkins)
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          crit = 0
+          for f in ("trivy-fs.json", "trivy-image.json"):
+              try:
+                  data = json.load(open(f))
+              except FileNotFoundError:
+                  continue
+              for r in data.get("Results", []):
+                  for v in r.get("Vulnerabilities", []) or []:
+                      sev = v.get("Severity")
+                      msg = f"{f}: {r.get('Target')} {v.get('PkgName')} {v.get('InstalledVersion')} {v.get('VulnerabilityID')} {sev} fixed={v.get('FixedVersion','')}"
+                      print(("::error::" if sev == "CRITICAL" else "::warning::") + msg)
+                      if sev == "CRITICAL":
+                          crit += 1
+                  for m in r.get("Misconfigurations", []) or []:
+                      print(f"::warning::{f}: {r.get('Target')} {m.get('ID')} {m.get('Severity')} {m.get('Title')}")
+                  for sct in r.get("Secrets", []) or []:
+                      print(f"::error::{f}: {r.get('Target')} secret {sct.get('RuleID')} line {sct.get('StartLine')}")
+                      crit += 1
+          print(f"CRITICAL findings: {crit}")
+          sys.exit(1 if crit else 0)
+          PY
