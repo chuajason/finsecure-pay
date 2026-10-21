@@ -14,7 +14,8 @@ FROM eclipse-temurin:21-jre-alpine
 ARG APP_VERSION=dev
 ENV APP_VERSION=${APP_VERSION} \
     JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75 -XX:+UseSerialGC"
-RUN addgroup -S app && adduser -S app -G app \
+RUN apk upgrade --no-cache \
+ && addgroup -S app && adduser -S app -G app \
  && apk add --no-cache curl
 WORKDIR /app
 COPY --from=build /workspace/target/extracted/dependencies/ ./
