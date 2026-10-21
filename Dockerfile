@@ -27,5 +27,5 @@ HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=3 \
   CMD curl -fsS http://localhost:8080/actuator/health/liveness || exit 1
 LABEL org.opencontainers.image.title="finsecure-pay" \
       org.opencontainers.image.version="${APP_VERSION}" \
-      org.opencontainers.image.source="https://github.com/csijc/finsecure-pay"
+      org.opencontainers.image.source="https://github.com/chuajason/finsecure-pay"
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]

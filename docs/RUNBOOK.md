@@ -16,7 +16,7 @@ GCP_PROJECT, NOTIFY_EMAIL), `k8s/deployment.yaml` (REPLACE_DOCKERHUB_USER),
 1.1 Clone the repository and run the tests locally (Java 21 and Maven, or use the Docker build).
 
 ```bash
-git clone https://github.com/csijc/finsecure-pay.git && cd finsecure-pay
+git clone https://github.com/chuajason/finsecure-pay.git && cd finsecure-pay
 mvn -B test
 ```
 
@@ -61,7 +61,7 @@ Capture **T2-build.png** (build output ending in the tag), **T2-run-health.png**
 3.1 In Google Cloud Shell (console.cloud.google.com, terminal icon top right), with a project selected and billing enabled:
 
 ```bash
-git clone https://github.com/csijc/finsecure-pay.git && cd finsecure-pay
+git clone https://github.com/chuajason/finsecure-pay.git && cd finsecure-pay
 PROJECT_ID=$(gcloud config get-value project) scripts/gcp-setup.sh
 ```
 
@@ -107,7 +107,7 @@ Capture **T3-recovery.png**: the watch output showing the old pod Terminating an
 ```bash
 gcloud compute ssh jenkins-vm --zone asia-southeast1-a
 # on the VM:
-curl -fsSL https://raw.githubusercontent.com/csijc/finsecure-pay/main/jenkins/vm-bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/chuajason/finsecure-pay/main/jenkins/vm-bootstrap.sh | bash
 ```
 
 About 8 minutes (it builds the controller image). It prints the URL and the initial admin password.
@@ -119,7 +119,7 @@ About 8 minutes (it builds the controller image). It prints the URL and the init
 
 4.4 Email: Manage Jenkins, System, **Extended E-mail Notification**: SMTP server `smtp.gmail.com`, port 587, Use TLS, credentials = your Gmail address plus a Gmail **app password** (Google Account, Security, 2-Step Verification, App passwords). Set the default recipients to your address. Also fill **E-mail Notification** (the basic one) the same way and use "Test configuration". Capture **T6-jenkins-email-test.png**.
 
-4.5 Pipeline job: New Item, name `finsecure-pay`, type **Pipeline**. Under Pipeline: Definition "Pipeline script from SCM", SCM Git, URL `https://github.com/csijc/finsecure-pay.git`, branch `*/main`, script path `Jenkinsfile`. Tick **GitHub hook trigger for GITScm polling**. Save.
+4.5 Pipeline job: New Item, name `finsecure-pay`, type **Pipeline**. Under Pipeline: Definition "Pipeline script from SCM", SCM Git, URL `https://github.com/chuajason/finsecure-pay.git`, branch `*/main`, script path `Jenkinsfile`. Tick **GitHub hook trigger for GITScm polling**. Save.
 
 4.6 GitHub webhook: repository Settings, Webhooks, Add: Payload URL `http://<VM-IP>:8080/github-webhook/`, content type `application/json`, just the push event. GitHub shows a green tick after the ping.
 

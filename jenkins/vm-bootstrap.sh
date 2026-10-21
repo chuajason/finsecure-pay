@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Run ONCE on the fresh Jenkins VM (Ubuntu 24.04) after SSH-ing in:
-#   curl -fsSL https://raw.githubusercontent.com/csijc/finsecure-pay/main/jenkins/vm-bootstrap.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/chuajason/finsecure-pay/main/jenkins/vm-bootstrap.sh | bash
 # Installs Docker, clones the repo, builds the Jenkins controller image and starts it.
 set -euo pipefail
 sudo apt-get update
@@ -15,7 +15,7 @@ export DOCKER_GID
 DOCKER_GID=$(getent group docker | cut -d: -f3)
 echo "Docker group id: $DOCKER_GID"
 cd "$HOME"
-[ -d finsecure-pay ] || git clone https://github.com/csijc/finsecure-pay.git
+[ -d finsecure-pay ] || git clone https://github.com/chuajason/finsecure-pay.git
 cd finsecure-pay/jenkins
 sudo DOCKER_GID="$DOCKER_GID" docker compose up -d --build
 echo
