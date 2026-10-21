@@ -1,0 +1,59 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: finsecure-pay-alerts
+  namespace: finsecure
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: finsecure-pay
+      rules:
+        # Alert 1: the validation API is down (no ready pods scraped for 1 minute).
+        - alert: FinSecurePayDown
+          expr: sum(up{job="finsecure-pay"}) == 0 or absent(up{job="finsecure-pay"})
+          for: 1m
+          labels:
+            severity: critical
+            namespace: finsecure
+          annotations:
+            summary: "FinSecure Pay API is down"
+            description: "No finsecure-pay pods have been scraped successfully for 1 minute."
+
+        # Alert 2: rejection rate above 50 percent for 2 minutes.
+        # Triggered deliberately in the demo with scripts/load.sh <url> 180 80
+        - alert: FinSecurePayHighRejectionRate
+          expr: |
+            sum(rate(finsecure_validations_total{result="rejected"}[2m]))
+              /
+            clamp_min(sum(rate(finsecure_validations_total[2m])), 0.001) > 0.5
+          for: 2m
+          labels:
+            severity: warning
+            namespace: finsecure
+          annotations:
+            summary: "More than half of transactions are being rejected"
+            description: "Rejection rate is {{ $value | humanizePercentage }} over the last 2 minutes. Check validation limits in the ConfigMap or upstream data quality."
+
+        # Alert 3: p95 latency above 500 ms for 3 minutes.
+        - alert: FinSecurePayHighLatency
+          expr: |
+            histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application="finsecure-pay", uri="/validate"}[5m])) by (le)) > 0.5
+          for: 3m
+          labels:
+            severity: warning
+            namespace: finsecure
+          annotations:
+            summary: "p95 latency on /validate above 500 ms"
+            description: "p95 latency is {{ $value }} seconds."
+
+        # Alert 4: fewer than 2 ready replicas.
+        - alert: FinSecurePayReplicasLow
+          expr: kube_deployment_status_replicas_available{namespace="finsecure", deployment="finsecure-pay"} < 2
+          for: 2m
+          labels:
+            severity: warning
+            namespace: finsecure
+          annotations:
+            summary: "finsecure-pay has fewer than 2 available replicas"
+            description: "Available replicas: {{ $value }}."

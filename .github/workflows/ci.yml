@@ -1,0 +1,65 @@
+# Build verification on GitHub Actions. Jenkins is the deployment pipeline for the
+# capstone; this workflow only proves the code compiles, tests pass, the image builds
+# and the scanners are clean on every push, so a broken commit is caught early.
+name: build-verify
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Build and test
+        run: mvn -B -ntp verify
+
+      - name: Static analysis (SpotBugs)
+        run: mvn -B -ntp spotbugs:check
+
+      - name: Test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: target/surefire-reports/
+
+      - name: Build container image
+        run: docker build --build-arg APP_VERSION=ci-${GITHUB_SHA::7} -t finsecure-pay:ci .
+
+      - name: Run container and check /health
+        run: |
+          docker run -d --name app -p 8080:8080 finsecure-pay:ci
+          for i in $(seq 1 30); do curl -fsS http://localhost:8080/health && break; sleep 2; done
+          curl -fsS http://localhost:8080/health
+          curl -s -X POST http://localhost:8080/validate -H 'Content-Type: application/json' \
+            -d "{\"transactionId\":\"ci-1\",\"accountId\":\"acc-1\",\"amount\":120.50,\"currency\":\"SGD\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}"
+          echo
+          docker logs app | tail -5
+          docker rm -f app
+
+      - name: Trivy repository scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scanners: vuln,secret,misconfig
+          severity: HIGH,CRITICAL
+          exit-code: "0"
+
+      - name: Trivy image scan (CRITICAL blocks)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: finsecure-pay:ci
+          severity: CRITICAL
+          exit-code: "1"

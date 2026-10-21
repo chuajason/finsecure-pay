@@ -1,0 +1,9 @@
+target/
+.git/
+.github/
+k8s/
+jenkins/
+docs/
+ai/
+scripts/
+*.md

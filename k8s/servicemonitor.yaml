@@ -1,0 +1,18 @@
+# Tells the kube-prometheus-stack Prometheus to scrape the app's Actuator endpoint.
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: finsecure-pay
+  namespace: finsecure
+  labels:
+    release: monitoring        # must match the Helm release name of kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: finsecure-pay
+  namespaceSelector:
+    matchNames: ["finsecure"]
+  endpoints:
+    - port: http
+      path: /actuator/prometheus
+      interval: 15s

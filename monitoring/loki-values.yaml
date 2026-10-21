@@ -1,0 +1,11 @@
+# Lightweight centralised logging for troubleshooting (Task 6.7).
+# helm repo add grafana https://grafana.github.io/helm-charts
+# helm upgrade --install loki grafana/loki-stack -n monitoring -f monitoring/loki-values.yaml
+loki:
+  enabled: true
+  persistence:
+    enabled: false
+promtail:
+  enabled: true
+grafana:
+  enabled: false        # we use the Grafana from kube-prometheus-stack; add Loki as a data source there

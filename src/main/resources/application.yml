@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: finsecure-pay
+
+server:
+  port: 8080
+  shutdown: graceful
+
+finsecure:
+  version: ${APP_VERSION:dev}
+  validation:
+    max-amount: ${FINSECURE_VALIDATION_MAX_AMOUNT:10000.00}
+    allowed-currencies: ${FINSECURE_VALIDATION_ALLOWED_CURRENCIES:SGD,USD,EUR}
+    max-transactions-per-minute: ${FINSECURE_VALIDATION_MAX_TPM:5}
+    clock-skew-seconds: ${FINSECURE_VALIDATION_CLOCK_SKEW_SECONDS:120}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level [%thread] %logger{36} - %msg%n"

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: finsecure-pay-config
+  namespace: finsecure
+data:
+  # Validation limits. Change here, apply, and restart the rollout: no image rebuild.
+  FINSECURE_VALIDATION_MAX_AMOUNT: "10000.00"
+  FINSECURE_VALIDATION_ALLOWED_CURRENCIES: "SGD,USD,EUR"
+  FINSECURE_VALIDATION_MAX_TPM: "5"
+  FINSECURE_VALIDATION_CLOCK_SKEW_SECONDS: "120"
+  JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=75 -XX:+UseSerialGC"
