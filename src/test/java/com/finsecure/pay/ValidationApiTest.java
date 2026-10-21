@@ -12,8 +12,8 @@ import java.time.Instant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.micrometer.metrics.test.autoconfigure.AutoConfigureMetrics;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,7 +23,7 @@ import com.finsecure.pay.validation.TransactionValidator;
 /** HTTP-level tests: status codes, JSON shape, health and metrics endpoints. */
 @SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureObservability   // tests disable metrics export by default; the Prometheus endpoint needs it on
+@AutoConfigureMetrics   // tests disable metrics export by default; the Prometheus endpoint needs it on
 class ValidationApiTest {
 
     @Autowired

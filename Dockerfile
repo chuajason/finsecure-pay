@@ -6,7 +6,7 @@ COPY pom.xml .
 RUN mvn -B -q dependency:go-offline
 COPY src ./src
 RUN mvn -B -q -DskipTests package \
- && java -Djarmode=layertools -jar target/finsecure-pay.jar extract --destination target/extracted
+ && java -Djarmode=tools -jar target/finsecure-pay.jar extract --layers --launcher --destination target/extracted
 
 # Stage 2: minimal runtime. JRE only, non-root user, layered copy so dependency
 # layers are cached and only the application layer changes between builds.
