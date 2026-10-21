@@ -1,0 +1,6 @@
+# Documented exceptions for Trivy. Each entry needs a reason and is reviewed per release.
+
+# DS-0031 "secrets passed via build-args or envs" fires on jenkins/Dockerfile because the
+# environment variable USE_GKE_GCLOUD_AUTH_PLUGIN contains the word AUTH. It is a boolean
+# feature flag required by Google's kubectl auth plugin, not a credential.
+DS-0031
