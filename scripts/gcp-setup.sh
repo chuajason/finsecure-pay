@@ -16,7 +16,7 @@ gcloud container clusters describe "$CLUSTER" --zone "$ZONE" >/dev/null 2>&1 || 
 gcloud container clusters create "$CLUSTER" --zone "$ZONE" \
   --num-nodes 2 --machine-type e2-medium --disk-size 30 --disk-type pd-standard \
   --release-channel regular --enable-ip-alias --no-enable-basic-auth \
-  --workload-pool="$PROJECT_ID.svc.id.goog" --logging=SYSTEM --monitoring=SYSTEM
+  --workload-pool="$PROJECT_ID.svc.id.goog" --logging=SYSTEM,WORKLOAD --monitoring=SYSTEM
 
 echo "== Service account for the Jenkins VM (least privilege: deploy to GKE only)"
 SA="jenkins-deployer@$PROJECT_ID.iam.gserviceaccount.com"

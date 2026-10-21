@@ -72,13 +72,15 @@ About 6 minutes. Note the Jenkins VM IP it prints.
 ```bash
 gcloud container clusters get-credentials finsecure-gke --zone asia-southeast1-a
 sed -i 's/REPLACE_DOCKERHUB_USER/<dockerhub-user>/' k8s/deployment.yaml
-kubectl apply -f k8s/namespace.yaml -f k8s/configmap.yaml -f k8s/service.yaml -f k8s/pdb.yaml -f k8s/deployment.yaml
+kubectl apply -f k8s/namespace.yaml
+kubectl -n finsecure create secret generic finsecure-pay-secrets --from-literal=FINSECURE_API_KEY="$(openssl rand -hex 16)"
+kubectl apply -f k8s/configmap.yaml -f k8s/service.yaml -f k8s/pdb.yaml -f k8s/deployment.yaml
 kubectl -n finsecure rollout status deployment/finsecure-pay
 kubectl -n finsecure get pods -o wide
 kubectl -n finsecure get svc finsecure-pay        # wait until EXTERNAL-IP is assigned
 ```
 
-Capture **T3-pods.png** (2 pods Running and READY 1/1), **T3-svc.png** (Service with external IP), and **T3-external.png**: `curl http://<EXTERNAL-IP>/health` from Cloud Shell and the same URL in your browser.
+Capture **T3-pods.png** (2 pods Running and READY 1/1), **T3-svc.png** (Service with external IP), and **T3-external.png**: `curl http://<EXTERNAL-IP>/health` from Cloud Shell and the same URL in your browser. The response includes `apiKeyConfigured: true`, which proves the Secret was injected without showing its value.
 
 3.3 Probes and config evidence:
 
@@ -165,7 +167,13 @@ scripts/demo-security-finding.sh fix
 
 Capture **T5-remediated.png**: the next build green with the Trivy table showing 0 CRITICAL.
 
-5.3 Secrets evidence. Capture **T5-secrets.png** showing all three together: the Jenkins credentials page (values masked), `kubectl -n finsecure get secret` (names only), and a `git grep -i password` in the repo returning only the example file and documentation.
+5.3 Secrets evidence. Capture **T5-secrets.png** showing all of these together:
+
+- the Jenkins credentials page (values masked);
+- `kubectl -n finsecure get secret finsecure-pay-secrets` (name and DATA count only) next to the `/health` response showing `apiKeyConfigured: true`;
+- the `reports/trivy-fs.txt` secret scan section from the last build showing no secrets found in the repository.
+
+The words password and token do appear in the repository as variable names (`passwordVariable`, `smtp_auth_password`); the evidence is that no literal values do.
 
 ---
 
@@ -175,7 +183,6 @@ Capture **T5-remediated.png**: the next build green with the Trivy table showing
 
 ```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 kubectl create namespace monitoring
 export GRAFANA_PW='choose-a-password' SMTP_PW='your-gmail-app-password'
@@ -185,7 +192,6 @@ helm upgrade --install monitoring prometheus-community/kube-prometheus-stack -n 
   --set grafana.adminPassword="$GRAFANA_PW" \
   --set alertmanager.config.global.smtp_auth_password="$SMTP_PW"
 kubectl apply -f k8s/servicemonitor.yaml -f monitoring/prometheus-rules.yaml -f monitoring/grafana-dashboard-configmap.yaml
-helm upgrade --install loki grafana/loki-stack -n monitoring -f monitoring/loki-values.yaml
 kubectl -n monitoring get svc monitoring-grafana     # external IP for Grafana
 ```
 
@@ -218,7 +224,15 @@ kubectl -n finsecure logs deployment/finsecure-pay --tail=20
 kubectl -n finsecure logs -l app=finsecure-pay --since=5m | grep REJECTED | head
 ```
 
-Capture **T6-logs-kubectl.png**. In Grafana add Loki as a data source (URL `http://loki:3100`), then Explore with `{namespace="finsecure"} |= "REJECTED"`. Capture **T6-logs-loki.png**.
+Capture **T6-logs-kubectl.png**. Centralised logging uses GKE's built-in Cloud Logging (the cluster was created with workload logging on, which is the cloud-native option the brief allows). In the Google Cloud console open Logs Explorer and run:
+
+```
+resource.type="k8s_container"
+resource.labels.namespace_name="finsecure"
+textPayload=~"REJECTED"
+```
+
+Capture **T6-logs-cloud.png** showing the structured entries with pod name, timestamp and the rejection reasons. This is the troubleshooting path documented in the design document: `kubectl logs` for a single pod right now, Logs Explorer for all pods over time.
 
 ---
 
@@ -242,5 +256,12 @@ Record with everything already deployed and green. Suggested order: repository a
 
 ## Cost control
 
-Between sessions: `PROJECT_ID=... scripts/gcp-pause.sh` and later `scripts/gcp-pause.sh resume`.
-After submission: `PROJECT_ID=... scripts/gcp-teardown.sh`, then check Billing for anything still running.
+Between sessions, from Cloud Shell:
+
+```bash
+export PROJECT_ID=$(gcloud config get-value project)
+scripts/gcp-pause.sh            # stop the VM, scale nodes to zero
+scripts/gcp-pause.sh resume     # bring them back (about 3 minutes)
+```
+
+After submission: `scripts/gcp-teardown.sh` with `PROJECT_ID` still exported, then check Billing for anything still running. The firewall rule opening 8080 to the internet is a convenience for the two-week demo window and is deleted by the teardown.

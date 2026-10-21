@@ -159,7 +159,7 @@ pipeline {
                     kubectl apply -f k8s/configmap.yaml
                     kubectl apply -f k8s/service.yaml
                     kubectl apply -f k8s/pdb.yaml
-                    sed "s|docker.io/REPLACE_DOCKERHUB_USER/finsecure-pay:[^ ]*|$IMAGE:$APP_VERSION|" k8s/deployment.yaml | kubectl apply -f -
+                    sed -E "s|image: docker.io/[^/ ]+/finsecure-pay:[^ ]+|image: $IMAGE:$APP_VERSION|" k8s/deployment.yaml | kubectl apply -f -
                     kubectl -n "$K8S_NAMESPACE" annotate deployment/finsecure-pay \
                         kubernetes.io/change-cause="Jenkins build $BUILD_NUMBER version $APP_VERSION" --overwrite
                     kubectl -n "$K8S_NAMESPACE" rollout status deployment/finsecure-pay --timeout=240s

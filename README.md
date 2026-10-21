@@ -50,10 +50,10 @@ Approved returns HTTP 200, rejected returns 422 with the reasons, malformed inpu
 | `k8s/` | Namespace, ConfigMap, Deployment (2 replicas, probes), Service, PDB, ServiceMonitor |
 | `Jenkinsfile` | Checkout, Build, Test, Package, Security Checks, Container Build, Image Scan, Push, Deploy, Smoke Test, with automatic rollback |
 | `jenkins/` | Jenkins controller image with Maven, Docker CLI, kubectl, gcloud and Trivy, plus VM bootstrap |
-| `monitoring/` | kube-prometheus-stack values, alert rules, Grafana dashboard, Loki values |
+| `monitoring/` | kube-prometheus-stack values, alert rules, Grafana dashboard |
 | `ai/` | Isolation Forest anomaly watcher over live Prometheus metrics |
 | `scripts/` | GCP setup, pause and teardown; demo scripts for the failing test and the security finding; load generator |
-| `docs/` | Runbook with the evidence checklist, design document, demo script |
+| `docs/` | Runbook with the evidence checklist (design document and demo script are added once the deployment evidence exists) |
 | `.github/workflows/ci.yml` | Build verification on every push (Jenkins remains the deployment pipeline) |
 
 ## Run locally
