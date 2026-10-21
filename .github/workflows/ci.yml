@@ -23,7 +23,13 @@ jobs:
           cache: maven
 
       - name: Build and test
-        run: mvn -B -ntp verify
+        run: |
+          set -o pipefail
+          if ! mvn -B -ntp verify 2>&1 | tee build.log; then
+            # Surface the first errors as annotations so they are visible without the raw log
+            grep -E "ERROR|Tests run:.*Failures: [1-9]|Tests run:.*Errors: [1-9]" build.log | grep -v "^\[ERROR\] *$" | head -30 | while IFS= read -r line; do echo "::error::${line:0:300}"; done
+            exit 1
+          fi
 
       - name: Static analysis (SpotBugs)
         run: mvn -B -ntp spotbugs:check
