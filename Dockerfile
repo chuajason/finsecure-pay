@@ -15,14 +15,14 @@ ARG APP_VERSION=dev
 ENV APP_VERSION=${APP_VERSION} \
     JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75 -XX:+UseSerialGC"
 RUN apk upgrade --no-cache \
- && addgroup -S app && adduser -S app -G app \
+ && addgroup -S -g 10001 app && adduser -S -u 10001 -G app app \
  && apk add --no-cache curl
 WORKDIR /app
 COPY --from=build /workspace/target/extracted/dependencies/ ./
 COPY --from=build /workspace/target/extracted/spring-boot-loader/ ./
 COPY --from=build /workspace/target/extracted/snapshot-dependencies/ ./
 COPY --from=build /workspace/target/extracted/application/ ./
-USER app
+USER 10001:10001
 EXPOSE 8080
 HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=3 \
   CMD curl -fsS http://localhost:8080/actuator/health/liveness || exit 1

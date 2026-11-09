@@ -27,6 +27,9 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        runAsUser: 10001        # numeric id so runAsNonRoot can be verified (image user is 10001)
+        runAsGroup: 10001
+        fsGroup: 10001
         seccompProfile:
           type: RuntimeDefault
       containers:
