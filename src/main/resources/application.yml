@@ -27,6 +27,12 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+    distribution:
+      # Publish histogram buckets so Prometheus can compute p95/p50 (dashboard and HighLatency alert)
+      percentiles-histogram:
+        http.server.requests: true
+      slo:
+        http.server.requests: 50ms,100ms,250ms,500ms,1s
 
 logging:
   pattern:
