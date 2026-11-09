@@ -1,13 +1,27 @@
 # Runbook and evidence checklist
 
+Status: Phases 1 to 7 were completed on 9 and 10 November 2026. The screenshots
+collected at each step are in `docs/evidence/`, named by task (T1 to T7). This runbook is
+kept as the record of how the environment was built and as the procedure to rebuild it.
+What remains is the recording (`docs/DEMO_SCRIPT.md`) and, after submission, the teardown.
+
 Work through the phases in order. Each step says what to run and what to capture.
-Name screenshots as suggested; the deck and design document reference them by name.
 Expect about 6 to 8 hours of hands-on time across several sessions. Pause the cloud
 resources between sessions with `scripts/gcp-pause.sh`.
 
 Placeholders to replace once, in these files: `Jenkinsfile` (DOCKERHUB_USER,
-GCP_PROJECT, NOTIFY_EMAIL), `k8s/deployment.yaml` (REPLACE_DOCKERHUB_USER),
-`monitoring/kube-prometheus-stack-values.yaml` (REPLACE_SMTP_FROM, REPLACE_NOTIFY_EMAIL).
+GCP_PROJECT, NOTIFY_EMAIL) and `k8s/deployment.yaml` (REPLACE_DOCKERHUB_USER, which
+Jenkins substitutes at deploy time anyway). The email addresses in
+`monitoring/kube-prometheus-stack-values.yaml` are set; passwords are passed at install time.
+
+## Things that went wrong, and the fix
+
+- Pod stuck in `CreateContainerConfigError`, "container has runAsNonRoot and image has non-numeric user (app)": the image created its user by name. Fixed by `adduser -u 10001` in the Dockerfile and `runAsUser: 10001` in the pod securityContext (commit 780c928).
+- GitHub Actions red with 16 CRITICAL CVEs in the image (Tomcat 10.1.40, Spring WebMVC 6.2.x): upgraded Spring Boot 3.4.5 to 4.1.1 and pinned `tomcat.version` 11.0.25 and `jackson-bom.version` 3.1.7. The gate was right.
+- Grafana p95 panel "No data": Spring Boot does not publish histogram buckets by default. Fixed with `management.metrics.distribution.percentiles-histogram.http.server.requests: true` (build #8).
+- Alert fired, no email: Alertmanager log showed `535 Username and Password not accepted`. The Gmail app password was wrong. `helm upgrade` with the right password delivered the queued email within a minute.
+- Chart alerts (Watchdog, KubeSchedulerDown, KubeProxyDown) were routed to email: the default route receiver is now `null`; only `namespace=finsecure` reaches Gmail.
+- `git pull` refused in Cloud Shell with divergent branches: a local commit duplicated one pushed from elsewhere. `git fetch && git reset --hard origin/main`.
 
 ---
 
@@ -244,13 +258,13 @@ pip install -r ai/requirements.txt
 python ai/anomaly_watch.py --prometheus http://localhost:9090 --minutes 120 --plot
 ```
 
-Run it after the alert demo in 6.4 so the 80 percent rejection window is in the data. Capture **T7-ai-output.png** (terminal with the anomaly windows) and keep `ai/anomaly_watch.png` for the deck.
+Run it after the alert demo in 6.4 so the 80 percent rejection window is in the data (use `--minutes 60` if the demo was within the hour). Capture **T7-anomaly-output.png** (terminal with the anomaly windows) and download `ai/anomaly_watch.png` with `cloudshell download ai/anomaly_watch.png` as **T7-anomaly-plot.png**.
 
 ---
 
 ## Demo recording (10 to 15 minutes)
 
-Record with everything already deployed and green. Suggested order: repository and Actions (1 min), live /health and /validate from the external IP (1 min), pods, service, delete a pod and watch recovery (2 min), Jenkins stage view of a green run and a failed-test run (2 min), security blocked run and remediated run (2 min), Grafana dashboard and the firing alert plus the email (3 min), AI anomaly output (1 min), rollback with the parameter (1 min), close with architecture slide (1 min). `docs/DEMO_SCRIPT.md` (to be written after the evidence is collected) has the narration.
+Follow `docs/DEMO_SCRIPT.md`: a timed script of about 12 minutes that walks the 10 slides in `docs/FinSecure_Pay_Capstone.pptx`, starts one live pipeline run at the beginning (by editing `docs/DEMO_LOG.md` on GitHub) and returns to it at the end, with live cuts to Jenkins, Cloud Shell, Grafana, Gmail and Logs Explorer in between.
 
 ---
 
@@ -260,8 +274,10 @@ Between sessions, from Cloud Shell:
 
 ```bash
 export PROJECT_ID=$(gcloud config get-value project)
-scripts/gcp-pause.sh            # stop the VM, scale nodes to zero
-scripts/gcp-pause.sh resume     # bring them back (about 3 minutes)
+scripts/gcp-pause.sh                              # stop the VM, scale nodes to zero
+MY_IP=<your public IP> scripts/gcp-pause.sh resume   # refresh the Jenkins firewall for your current IP, then bring everything back (about 5 minutes)
 ```
+
+Get the IP from whatismyip.com in your browser, not from Cloud Shell. Static addresses do not change: Jenkins http://34.126.137.15:8080, app http://35.197.154.237, Grafana http://34.177.101.0.
 
 After submission: `scripts/gcp-teardown.sh` with `PROJECT_ID` still exported, then check Billing for anything still running. The Jenkins firewall rule allows port 8080 only from your public IP and from GitHub's webhook ranges, and is deleted by the teardown.

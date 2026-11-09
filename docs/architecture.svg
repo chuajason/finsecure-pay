@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1130" viewBox="0 0 1900 1130" font-family="Calibri, Carlito, Helvetica, Arial, sans-serif">
+<defs><marker id="ah" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#333333"/></marker></defs>
+<rect width="1900" height="1130" fill="#FFFFFF"/>
+<text x="40" y="48" font-size="28" font-weight="bold" fill="#1F2937">FinSecure Pay: end-to-end architecture (as deployed, November 2026)</text>
+<text x="40" y="76" font-size="15" fill="#4B5563">Solid arrows: delivery and request paths. Dashed arrows: pulls and reads. GKE is zonal (asia-southeast1-a, 2 x e2-standard-2); monitoring is kube-prometheus-stack installed with Helm. Numbers follow one change from push to a monitored, alerting service.</text>
+<rect x="380" y="110" width="340" height="510" rx="8" fill="#EEF4FB" stroke="#9DB8D9" stroke-width="1.5"/>
+<text x="394" y="136" font-size="16" font-weight="bold" fill="#1F2937">Source and verification (GitHub)</text>
+<rect x="760" y="110" width="360" height="510" rx="8" fill="#FFF6EA" stroke="#E2B97F" stroke-width="1.5"/>
+<text x="774" y="136" font-size="16" font-weight="bold" fill="#1F2937">CI/CD: Jenkins VM (GCE e2-standard-4)</text>
+<rect x="1160" y="110" width="700" height="740" rx="8" fill="#EFF8F0" stroke="#9CCBA3" stroke-width="1.5"/>
+<text x="1174" y="136" font-size="16" font-weight="bold" fill="#1F2937">Runtime: GKE cluster finsecure-gke</text>
+<rect x="380" y="870" width="1480" height="200" rx="8" fill="#F7EEF7" stroke="#C7A3C7" stroke-width="1.5"/>
+<text x="394" y="896" font-size="16" font-weight="bold" fill="#1F2937">Observers and notifications</text>
+<rect x="60" y="130" width="260" height="100" rx="6" fill="#FFFFFF" stroke="#555555" stroke-width="2"/>
+<text x="190.0" y="152" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">API clients and load generator</text>
+<text x="190.0" y="171" text-anchor="middle" font-size="13" fill="#374151">POST /validate, GET /health</text>
+<text x="190.0" y="190" text-anchor="middle" font-size="13" fill="#374151">scripts/load.sh</text>
+<rect x="60" y="280" width="260" height="120" rx="6" fill="#FFFFFF" stroke="#555555" stroke-width="2"/>
+<text x="190.0" y="302" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Developer</text>
+<text x="190.0" y="321" text-anchor="middle" font-size="13" fill="#374151">git commit and push</text>
+<text x="190.0" y="340" text-anchor="middle" font-size="13" fill="#374151">(GitHub account chuajason)</text>
+<rect x="410" y="280" width="280" height="130" rx="6" fill="#FFFFFF" stroke="#2F5496" stroke-width="2"/>
+<text x="550.0" y="302" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">GitHub repository</text>
+<text x="550.0" y="321" text-anchor="middle" font-size="13" fill="#374151">chuajason/finsecure-pay (public)</text>
+<text x="550.0" y="340" text-anchor="middle" font-size="13" fill="#374151">Spring Boot app, Dockerfile, k8s/,</text>
+<text x="550.0" y="359" text-anchor="middle" font-size="13" fill="#374151">Jenkinsfile, monitoring/, ai/, docs/</text>
+<rect x="410" y="450" width="280" height="130" rx="6" fill="#FFFFFF" stroke="#2F5496" stroke-width="2"/>
+<text x="550.0" y="472" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">GitHub Actions: build-verify</text>
+<text x="550.0" y="491" text-anchor="middle" font-size="13" fill="#374151">compile, 15 JUnit tests, SpotBugs,</text>
+<text x="550.0" y="510" text-anchor="middle" font-size="13" fill="#374151">Trivy fs and image (CRITICAL fails)</text>
+<text x="550.0" y="529" text-anchor="middle" font-size="13" fill="#374151">verification only, no deploy</text>
+<rect x="790" y="180" width="300" height="320" rx="6" fill="#FFFFFF" stroke="#B26A00" stroke-width="2"/>
+<text x="940.0" y="202" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Jenkins pipeline (Jenkinsfile)</text>
+<text x="804" y="224" font-size="13" fill="#374151" xml:space="preserve">1 Checkout: tag = pom-build-sha</text>
+<text x="804" y="246" font-size="13" fill="#374151" xml:space="preserve">2 Build   3 Test (JUnit)</text>
+<text x="804" y="268" font-size="13" fill="#374151" xml:space="preserve">4 Package (layered jar)</text>
+<text x="804" y="290" font-size="13" fill="#374151" xml:space="preserve">5 Security Checks: SpotBugs,</text>
+<text x="804" y="312" font-size="13" fill="#374151" xml:space="preserve">   Trivy fs (CRITICAL = fail)</text>
+<text x="804" y="334" font-size="13" fill="#374151" xml:space="preserve">6 Container Build</text>
+<text x="804" y="356" font-size="13" fill="#374151" xml:space="preserve">7 Image Scan: Trivy (CRITICAL = fail)</text>
+<text x="804" y="378" font-size="13" fill="#374151" xml:space="preserve">8 Push to Docker Hub</text>
+<text x="804" y="400" font-size="13" fill="#374151" xml:space="preserve">9 Deploy: kubectl apply, rollout</text>
+<text x="804" y="422" font-size="13" fill="#374151" xml:space="preserve">   status, auto rollback on failure</text>
+<text x="804" y="444" font-size="13" fill="#374151" xml:space="preserve">10 Smoke Test /health</text>
+<text x="804" y="466" font-size="13" fill="#374151" xml:space="preserve">ROLLBACK param: rollout undo</text>
+<text x="804" y="488" font-size="13" fill="#374151" xml:space="preserve">GKE auth: VM service account</text>
+<rect x="850" y="640" width="240" height="110" rx="6" fill="#FFFFFF" stroke="#555555" stroke-width="2"/>
+<text x="970.0" y="662" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Docker Hub</text>
+<text x="970.0" y="681" text-anchor="middle" font-size="13" fill="#374151">docker.io/chuajason/finsecure-pay</text>
+<text x="970.0" y="700" text-anchor="middle" font-size="13" fill="#374151">tags 1.0.0, 1.1.0-&lt;build&gt;-&lt;sha&gt;</text>
+<rect x="1190" y="180" width="540" height="300" rx="8" fill="none" stroke="#2E7D32" stroke-width="2" stroke-dasharray="8 5"/>
+<text x="1204" y="202" font-size="14" font-weight="bold" fill="#2E7D32">namespace finsecure</text>
+<rect x="1210" y="230" width="320" height="130" rx="6" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+<text x="1370.0" y="252" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Deployment finsecure-pay</text>
+<text x="1370.0" y="271" text-anchor="middle" font-size="13" fill="#374151">2 replicas, RollingUpdate maxUnavailable 0</text>
+<text x="1370.0" y="290" text-anchor="middle" font-size="13" fill="#374151">startup, readiness, liveness probes</text>
+<text x="1370.0" y="309" text-anchor="middle" font-size="13" fill="#374151">runAsNonRoot uid 10001, read-only root fs</text>
+<text x="1370.0" y="328" text-anchor="middle" font-size="13" fill="#374151">PodDisruptionBudget minAvailable 1</text>
+<rect x="1560" y="230" width="160" height="100" rx="6" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+<text x="1640.0" y="252" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Service (LB)</text>
+<text x="1640.0" y="271" text-anchor="middle" font-size="13" fill="#374151">35.197.154.237:80</text>
+<text x="1640.0" y="290" text-anchor="middle" font-size="13" fill="#374151">to pods :8080</text>
+<rect x="1230" y="380" width="200" height="85" rx="6" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+<text x="1330.0" y="402" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">ConfigMap</text>
+<text x="1330.0" y="421" text-anchor="middle" font-size="13" fill="#374151">validation limits, currencies,</text>
+<text x="1330.0" y="440" text-anchor="middle" font-size="13" fill="#374151">velocity, JAVA_TOOL_OPTIONS</text>
+<rect x="1470" y="380" width="240" height="85" rx="6" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+<text x="1590.0" y="402" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Secret (by hand, never in Git)</text>
+<text x="1590.0" y="421" text-anchor="middle" font-size="13" fill="#374151">FINSECURE_API_KEY</text>
+<text x="1590.0" y="440" text-anchor="middle" font-size="13" fill="#374151">required: deploy fails if missing</text>
+<rect x="1190" y="510" width="640" height="320" rx="8" fill="none" stroke="#7B3F7B" stroke-width="2" stroke-dasharray="8 5"/>
+<text x="1204" y="532" font-size="14" font-weight="bold" fill="#7B3F7B">namespace monitoring</text>
+<rect x="1230" y="560" width="250" height="110" rx="6" fill="#FFFFFF" stroke="#7B3F7B" stroke-width="2"/>
+<text x="1355.0" y="582" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Prometheus</text>
+<text x="1355.0" y="601" text-anchor="middle" font-size="13" fill="#374151">scrapes ServiceMonitor targets</text>
+<text x="1355.0" y="620" text-anchor="middle" font-size="13" fill="#374151">4 rules: Down, HighRejectionRate,</text>
+<text x="1355.0" y="639" text-anchor="middle" font-size="13" fill="#374151">HighLatency, ReplicasLow</text>
+<rect x="1530" y="560" width="270" height="110" rx="6" fill="#FFFFFF" stroke="#7B3F7B" stroke-width="2"/>
+<text x="1665.0" y="582" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Alertmanager</text>
+<text x="1665.0" y="601" text-anchor="middle" font-size="13" fill="#374151">route namespace=finsecure to email</text>
+<text x="1665.0" y="620" text-anchor="middle" font-size="13" fill="#374151">group_wait 30s, resolved notices</text>
+<rect x="1230" y="720" width="250" height="90" rx="6" fill="#FFFFFF" stroke="#7B3F7B" stroke-width="2"/>
+<text x="1355.0" y="742" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Grafana (LoadBalancer)</text>
+<text x="1355.0" y="761" text-anchor="middle" font-size="13" fill="#374151">FinSecure Pay dashboard, 6 panels</text>
+<text x="1355.0" y="780" text-anchor="middle" font-size="13" fill="#374151">loaded from a ConfigMap</text>
+<rect x="1530" y="720" width="270" height="90" rx="6" fill="#FFFFFF" stroke="#7B3F7B" stroke-width="2"/>
+<text x="1665.0" y="742" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">kube-state-metrics, node-exporter</text>
+<text x="1665.0" y="761" text-anchor="middle" font-size="13" fill="#374151">replica counts, node and</text>
+<text x="1665.0" y="780" text-anchor="middle" font-size="13" fill="#374151">pod resource metrics</text>
+<rect x="850" y="930" width="240" height="110" rx="6" fill="#FFFFFF" stroke="#555555" stroke-width="2"/>
+<text x="970.0" y="952" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Cloud Logging (GKE agent)</text>
+<text x="970.0" y="971" text-anchor="middle" font-size="13" fill="#374151">container stdout, all pods</text>
+<text x="970.0" y="990" text-anchor="middle" font-size="13" fill="#374151">Logs Explorer by namespace</text>
+<rect x="1190" y="930" width="270" height="110" rx="6" fill="#FFFFFF" stroke="#555555" stroke-width="2"/>
+<text x="1325.0" y="952" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">AI anomaly watcher</text>
+<text x="1325.0" y="971" text-anchor="middle" font-size="13" fill="#374151">ai/anomaly_watch.py, Isolation Forest</text>
+<text x="1325.0" y="990" text-anchor="middle" font-size="13" fill="#374151">over req/s, rejected share, p95</text>
+<text x="1325.0" y="1009" text-anchor="middle" font-size="13" fill="#374151">reads Prometheus query_range</text>
+<rect x="1500" y="930" width="300" height="110" rx="6" fill="#FFFFFF" stroke="#555555" stroke-width="2"/>
+<text x="1650.0" y="952" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Gmail (jason.rockie@gmail.com)</text>
+<text x="1650.0" y="971" text-anchor="middle" font-size="13" fill="#374151">Jenkins SUCCESS / FAILED emails</text>
+<text x="1650.0" y="990" text-anchor="middle" font-size="13" fill="#374151">Alertmanager FIRING / RESOLVED emails</text>
+<path d="M320,340 L410,340" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<text x="340" y="328" font-size="13" font-weight="bold" fill="#111827">1 push</text>
+<path d="M550,410 L550,450" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<text x="560" y="438" font-size="13" font-weight="bold" fill="#111827">2a Actions run</text>
+<path d="M690,340 L790,340" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<text x="700" y="328" font-size="13" font-weight="bold" fill="#111827">2b webhook</text>
+<path d="M970,500 L970,640" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<text x="980" y="580" font-size="13" font-weight="bold" fill="#111827">3 push image</text>
+<path d="M1090,300 L1210,300" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<text x="1100" y="288" font-size="13" font-weight="bold" fill="#111827">4 kubectl apply</text>
+<path d="M1090,695 L1140,695 L1140,330 L1210,330" fill="none" stroke="#333333" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="1100" y="720" font-size="13" font-weight="bold" fill="#111827">5 image pull</text>
+<path d="M190,130 L190,95 L1635,95 L1635,230" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<text x="700" y="88" font-size="13" font-weight="bold" fill="#111827">6 HTTP requests (clients, load generator, Jenkins smoke test)</text>
+<path d="M1560,280 L1530,280" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M1330,360 L1330,380" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M1590,360 L1590,380" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M1450,560 L1450,360" fill="none" stroke="#333333" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="1460" y="498" font-size="13" font-weight="bold" fill="#111827">7 scrape /actuator/prometheus</text>
+<path d="M1480,615 L1530,615" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<text x="1483" y="603" font-size="13" font-weight="bold" fill="#111827">8 alert</text>
+<path d="M1300,670 L1300,720" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<text x="1310" y="703" font-size="13" font-weight="bold" fill="#111827">9 query</text>
+<path d="M1800,615 L1830,615 L1830,985 L1800,985" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<text x="1735" y="850" font-size="13" font-weight="bold" fill="#111827">10 alert email</text>
+<path d="M790,480 L740,480 L740,1095 L1650,1095 L1650,1040" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<text x="760" y="1085" font-size="13" font-weight="bold" fill="#111827">11 build emails</text>
+<path d="M1190,465 L1170,465 L1170,858 L970,858 L970,930" fill="none" stroke="#333333" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="980" y="915" font-size="13" font-weight="bold" fill="#111827">12 stdout logs</text>
+<path d="M1205,930 L1205,640 L1230,640" fill="none" stroke="#333333" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+<text x="1215" y="880" font-size="13" font-weight="bold" fill="#111827">13 query_range</text>
+</svg>
