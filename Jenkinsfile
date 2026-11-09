@@ -25,13 +25,13 @@ pipeline {
     }
 
     environment {
-        DOCKERHUB_USER   = 'REPLACE_DOCKERHUB_USER'
+        DOCKERHUB_USER   = 'chuajason'
         IMAGE            = "docker.io/${DOCKERHUB_USER}/finsecure-pay"
         K8S_NAMESPACE    = 'finsecure'
         GKE_CLUSTER      = 'finsecure-gke'
         GKE_ZONE         = 'asia-southeast1-a'
-        GCP_PROJECT      = 'REPLACE_GCP_PROJECT_ID'
-        NOTIFY_EMAIL     = 'REPLACE_NOTIFY_EMAIL'
+        GCP_PROJECT      = 'finsecure-pay-514214'
+        NOTIFY_EMAIL     = 'jason.rockie@gmail.com'
     }
 
     stages {
