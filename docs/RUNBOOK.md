@@ -185,8 +185,8 @@ The words password and token do appear in the repository as variable names (`pas
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 kubectl create namespace monitoring
-export GRAFANA_PW='choose-a-password' SMTP_PW='your-gmail-app-password'
-sed -i 's/REPLACE_SMTP_FROM/you@gmail.com/; s/REPLACE_NOTIFY_EMAIL/you@gmail.com/' monitoring/kube-prometheus-stack-values.yaml
+read -s -p "Grafana admin password: " GRAFANA_PW; echo
+read -s -p "Gmail app password (16 chars, no spaces): " SMTP_PW; echo
 helm upgrade --install monitoring prometheus-community/kube-prometheus-stack -n monitoring \
   -f monitoring/kube-prometheus-stack-values.yaml \
   --set grafana.adminPassword="$GRAFANA_PW" \

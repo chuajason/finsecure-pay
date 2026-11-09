@@ -1,0 +1,460 @@
+Started by GitHub push by chuajason
+Obtained Jenkinsfile from git https://github.com/chuajason/finsecure-pay.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/finsecure-pay
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/chuajason/finsecure-pay.git
+ > git init /var/jenkins_home/workspace/finsecure-pay # timeout=10
+Fetching upstream changes from https://github.com/chuajason/finsecure-pay.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/chuajason/finsecure-pay.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/chuajason/finsecure-pay.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision a8beed1a0571cb443895450f5ab97c21509d996b (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f a8beed1a0571cb443895450f5ab97c21509d996b # timeout=10
+Commit message: "demo: add log4j-core 2.14.1 (expect security gate to block)"
+ > git rev-list --no-walk 7488c0208b672db3f2866a08d239d41a97483d70 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] timeout
+[2026-11-09T16:24:31.901Z] Timeout set to expire in 30 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+[2026-11-09T16:24:32.007Z] Selected Git installation does not exist. Using Default
+[2026-11-09T16:24:32.007Z] The recommended git tool is: NONE
+[2026-11-09T16:24:32.008Z] No credentials specified
+[2026-11-09T16:24:32.008Z]  > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/finsecure-pay/.git # timeout=10
+[2026-11-09T16:24:32.015Z] Fetching changes from the remote Git repository
+[2026-11-09T16:24:32.016Z]  > git config remote.origin.url https://github.com/chuajason/finsecure-pay.git # timeout=10
+[2026-11-09T16:24:32.022Z] Fetching upstream changes from https://github.com/chuajason/finsecure-pay.git
+[2026-11-09T16:24:32.023Z]  > git --version # timeout=10
+[2026-11-09T16:24:32.028Z]  > git --version # 'git version 2.47.3'
+[2026-11-09T16:24:32.028Z]  > git fetch --tags --force --progress -- https://github.com/chuajason/finsecure-pay.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-11-09T16:24:32.581Z]  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+[2026-11-09T16:24:32.588Z] Checking out Revision a8beed1a0571cb443895450f5ab97c21509d996b (refs/remotes/origin/main)
+[2026-11-09T16:24:32.588Z]  > git config core.sparsecheckout # timeout=10
+[2026-11-09T16:24:32.593Z]  > git checkout -f a8beed1a0571cb443895450f5ab97c21509d996b # timeout=10
+[2026-11-09T16:24:32.605Z] Commit message: "demo: add log4j-core 2.14.1 (expect security gate to block)"
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
+[2026-11-09T16:24:32.936Z] + git rev-parse --short=7 HEAD
+[Pipeline] sh
+[2026-11-09T16:24:33.229Z] + mvn -q -DforceStdout help:evaluate -Dexpression=project.version
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] echo
+[2026-11-09T16:24:36.561Z] Building docker.io/chuajason/finsecure-pay:1.1.0-6-a8beed1
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Rollback)
+Stage "Rollback" skipped due to when conditional
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] sh
+[2026-11-09T16:24:37.059Z] + mvn -B -ntp clean compile
+[2026-11-09T16:24:38.921Z] [INFO] Scanning for projects...
+[2026-11-09T16:24:39.472Z] [INFO] 
+[2026-11-09T16:24:39.473Z] [INFO] --------------------< com.finsecure:finsecure-pay >---------------------
+[2026-11-09T16:24:39.473Z] [INFO] Building FinSecure Pay 1.1.0
+[2026-11-09T16:24:39.473Z] [INFO]   from pom.xml
+[2026-11-09T16:24:39.473Z] [INFO] --------------------------------[ jar ]---------------------------------
+[2026-11-09T16:24:41.956Z] [INFO] 
+[2026-11-09T16:24:41.956Z] [INFO] --- clean:3.5.0:clean (default-clean) @ finsecure-pay ---
+[2026-11-09T16:24:41.956Z] [INFO] 
+[2026-11-09T16:24:41.956Z] [INFO] --- resources:3.5.0:resources (default-resources) @ finsecure-pay ---
+[2026-11-09T16:24:41.956Z] [INFO] Copying 1 resource from src/main/resources to target/classes
+[2026-11-09T16:24:41.956Z] [INFO] Copying 0 resource from src/main/resources to target/classes
+[2026-11-09T16:24:41.956Z] [INFO] 
+[2026-11-09T16:24:41.956Z] [INFO] --- compiler:3.15.0:compile (default-compile) @ finsecure-pay ---
+[2026-11-09T16:24:41.956Z] [INFO] Recompiling the module because of changed dependency.
+[2026-11-09T16:24:41.956Z] [INFO] Compiling 9 source files with javac [debug parameters release 21] to target/classes
+[2026-11-09T16:24:43.820Z] [INFO] Annotation processing is enabled because one or more processors were found
+[2026-11-09T16:24:43.820Z]   on the class path. A future release of javac may disable annotation processing
+[2026-11-09T16:24:43.820Z]   unless at least one processor is specified by name (-processor), or a search
+[2026-11-09T16:24:43.820Z]   path is specified (--processor-path, --processor-module-path), or annotation
+[2026-11-09T16:24:43.820Z]   processing is enabled explicitly (-proc:only, -proc:full).
+[2026-11-09T16:24:43.820Z]   Use -Xlint:-options to suppress this message.
+[2026-11-09T16:24:43.820Z]   Use -proc:none to disable annotation processing.
+[2026-11-09T16:24:43.820Z] [INFO] /var/jenkins_home/workspace/finsecure-pay/src/main/java/com/finsecure/pay/api/ValidationController.java: /var/jenkins_home/workspace/finsecure-pay/src/main/java/com/finsecure/pay/api/ValidationController.java uses or overrides a deprecated API.
+[2026-11-09T16:24:43.820Z] [INFO] /var/jenkins_home/workspace/finsecure-pay/src/main/java/com/finsecure/pay/api/ValidationController.java: Recompile with -Xlint:deprecation for details.
+[2026-11-09T16:24:43.820Z] [INFO] ------------------------------------------------------------------------
+[2026-11-09T16:24:43.820Z] [INFO] BUILD SUCCESS
+[2026-11-09T16:24:43.820Z] [INFO] ------------------------------------------------------------------------
+[2026-11-09T16:24:43.820Z] [INFO] Total time:  4.615 s
+[2026-11-09T16:24:43.820Z] [INFO] Finished at: 2026-11-09T16:24:43Z
+[2026-11-09T16:24:43.820Z] [INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] sh
+[2026-11-09T16:24:44.195Z] + mvn -B -ntp test
+[2026-11-09T16:24:46.057Z] [INFO] Scanning for projects...
+[2026-11-09T16:24:46.608Z] [INFO] 
+[2026-11-09T16:24:46.608Z] [INFO] --------------------< com.finsecure:finsecure-pay >---------------------
+[2026-11-09T16:24:46.608Z] [INFO] Building FinSecure Pay 1.1.0
+[2026-11-09T16:24:46.608Z] [INFO]   from pom.xml
+[2026-11-09T16:24:46.608Z] [INFO] --------------------------------[ jar ]---------------------------------
+[2026-11-09T16:24:47.159Z] [INFO] 
+[2026-11-09T16:24:47.159Z] [INFO] --- resources:3.5.0:resources (default-resources) @ finsecure-pay ---
+[2026-11-09T16:24:47.413Z] [INFO] Copying 1 resource from src/main/resources to target/classes
+[2026-11-09T16:24:47.413Z] [INFO] Copying 0 resource from src/main/resources to target/classes
+[2026-11-09T16:24:47.413Z] [INFO] 
+[2026-11-09T16:24:47.413Z] [INFO] --- compiler:3.15.0:compile (default-compile) @ finsecure-pay ---
+[2026-11-09T16:24:47.413Z] [INFO] Nothing to compile - all classes are up to date.
+[2026-11-09T16:24:47.413Z] [INFO] 
+[2026-11-09T16:24:47.413Z] [INFO] --- resources:3.5.0:testResources (default-testResources) @ finsecure-pay ---
+[2026-11-09T16:24:47.413Z] [INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/finsecure-pay/src/test/resources
+[2026-11-09T16:24:47.413Z] [INFO] 
+[2026-11-09T16:24:47.413Z] [INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ finsecure-pay ---
+[2026-11-09T16:24:47.664Z] [INFO] Recompiling the module because of changed source code.
+[2026-11-09T16:24:47.664Z] [INFO] Compiling 2 source files with javac [debug parameters release 21] to target/test-classes
+[2026-11-09T16:24:49.526Z] [INFO] Annotation processing is enabled because one or more processors were found
+[2026-11-09T16:24:49.526Z]   on the class path. A future release of javac may disable annotation processing
+[2026-11-09T16:24:49.526Z]   unless at least one processor is specified by name (-processor), or a search
+[2026-11-09T16:24:49.526Z]   path is specified (--processor-path, --processor-module-path), or annotation
+[2026-11-09T16:24:49.526Z]   processing is enabled explicitly (-proc:only, -proc:full).
+[2026-11-09T16:24:49.526Z]   Use -Xlint:-options to suppress this message.
+[2026-11-09T16:24:49.526Z]   Use -proc:none to disable annotation processing.
+[2026-11-09T16:24:49.526Z] [INFO] /var/jenkins_home/workspace/finsecure-pay/src/test/java/com/finsecure/pay/ValidationApiTest.java: /var/jenkins_home/workspace/finsecure-pay/src/test/java/com/finsecure/pay/ValidationApiTest.java uses or overrides a deprecated API.
+[2026-11-09T16:24:49.526Z] [INFO] /var/jenkins_home/workspace/finsecure-pay/src/test/java/com/finsecure/pay/ValidationApiTest.java: Recompile with -Xlint:deprecation for details.
+[2026-11-09T16:24:49.526Z] [INFO] 
+[2026-11-09T16:24:49.526Z] [INFO] --- surefire:3.5.6:test (default-test) @ finsecure-pay ---
+[2026-11-09T16:24:49.526Z] [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[2026-11-09T16:24:49.776Z] [INFO] 
+[2026-11-09T16:24:49.776Z] [INFO] -------------------------------------------------------
+[2026-11-09T16:24:49.776Z] [INFO]  T E S T S
+[2026-11-09T16:24:49.776Z] [INFO] -------------------------------------------------------
+[2026-11-09T16:24:51.120Z] [INFO] Running com.finsecure.pay.ValidationApiTest
+[2026-11-09T16:24:51.371Z] 16:24:51.066 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.finsecure.pay.ValidationApiTest]: ValidationApiTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+[2026-11-09T16:24:51.371Z] 16:24:51.235 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.finsecure.pay.FinSecurePayApplication for test class com.finsecure.pay.ValidationApiTest
+[2026-11-09T16:24:51.621Z] 16:24:51.366 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.finsecure.pay.ValidationApiTest]: ValidationApiTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+[2026-11-09T16:24:51.621Z] 16:24:51.373 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.finsecure.pay.FinSecurePayApplication for test class com.finsecure.pay.ValidationApiTest
+[2026-11-09T16:24:52.172Z] 
+[2026-11-09T16:24:52.172Z]   .   ____          _            __ _ _
+[2026-11-09T16:24:52.172Z]  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+[2026-11-09T16:24:52.172Z] ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+[2026-11-09T16:24:52.172Z]  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+[2026-11-09T16:24:52.172Z]   '  |____| .__|_| |_|_| |_\__, | / / / /
+[2026-11-09T16:24:52.172Z]  =========|_|==============|___/=/_/_/_/
+[2026-11-09T16:24:52.172Z] 
+[2026-11-09T16:24:52.172Z]  :: Spring Boot ::                (v4.1.1)
+[2026-11-09T16:24:52.172Z] 
+[2026-11-09T16:24:52.172Z] 2026-11-09T16:24:51.906Z INFO  [main] com.finsecure.pay.ValidationApiTest - Starting ValidationApiTest using Java 21.0.13 with PID 4986 (started by jenkins in /var/jenkins_home/workspace/finsecure-pay)
+[2026-11-09T16:24:52.172Z] 2026-11-09T16:24:51.908Z INFO  [main] com.finsecure.pay.ValidationApiTest - No active profile set, falling back to 1 default profile: "default"
+[2026-11-09T16:24:54.657Z] 2026-11-09T16:24:54.394Z INFO  [main] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[2026-11-09T16:24:54.657Z] 2026-11-09T16:24:54.395Z INFO  [main] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+[2026-11-09T16:24:54.657Z] 2026-11-09T16:24:54.408Z INFO  [main] o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+[2026-11-09T16:24:54.657Z] 2026-11-09T16:24:54.422Z INFO  [main] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 26 ms
+[2026-11-09T16:24:54.657Z] 2026-11-09T16:24:54.520Z INFO  [main] com.finsecure.pay.ValidationApiTest - Started ValidationApiTest in 3.072 seconds (process running for 4.861)
+[2026-11-09T16:24:54.907Z] Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+[2026-11-09T16:24:55.458Z] WARNING: A Java agent has been loaded dynamically (/var/jenkins_home/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar)
+[2026-11-09T16:24:55.458Z] WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+[2026-11-09T16:24:55.458Z] WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+[2026-11-09T16:24:55.458Z] WARNING: Dynamic loading of agents will be disallowed by default in a future release
+[2026-11-09T16:24:56.371Z] 2026-11-09T16:24:55.982Z INFO  [main] c.f.pay.api.ValidationController - validation result=APPROVED txId=api-1 account=acc-77 amount=99.90 SGD
+[2026-11-09T16:24:56.621Z] 2026-11-09T16:24:56.380Z WARN  [main] c.f.pay.api.ValidationController - validation result=REJECTED txId=api-2 account=acc-77 reasons=[AMOUNT_EXCEEDS_LIMIT]
+[2026-11-09T16:24:56.621Z] [INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.643 s -- in com.finsecure.pay.ValidationApiTest
+[2026-11-09T16:24:56.621Z] [INFO] Running com.finsecure.pay.TransactionValidatorTest
+[2026-11-09T16:24:56.621Z] [INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.157 s -- in com.finsecure.pay.TransactionValidatorTest
+[2026-11-09T16:24:56.872Z] [INFO] 
+[2026-11-09T16:24:56.872Z] [INFO] Results:
+[2026-11-09T16:24:56.872Z] [INFO] 
+[2026-11-09T16:24:56.872Z] [INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0
+[2026-11-09T16:24:56.872Z] [INFO] 
+[2026-11-09T16:24:56.872Z] [INFO] ------------------------------------------------------------------------
+[2026-11-09T16:24:56.872Z] [INFO] BUILD SUCCESS
+[2026-11-09T16:24:56.872Z] [INFO] ------------------------------------------------------------------------
+[2026-11-09T16:24:56.872Z] [INFO] Total time:  10.833 s
+[2026-11-09T16:24:56.872Z] [INFO] Finished at: 2026-11-09T16:24:56Z
+[2026-11-09T16:24:56.872Z] [INFO] ------------------------------------------------------------------------
+Post stage
+[Pipeline] junit
+[2026-11-09T16:24:56.903Z] Recording test results
+[2026-11-09T16:24:56.919Z] [Checks API] No suitable checks publisher found.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Package)
+[Pipeline] sh
+[2026-11-09T16:24:57.318Z] + mvn -B -ntp -DskipTests package
+[2026-11-09T16:24:59.180Z] [INFO] Scanning for projects...
+[2026-11-09T16:24:59.731Z] [INFO] 
+[2026-11-09T16:24:59.731Z] [INFO] --------------------< com.finsecure:finsecure-pay >---------------------
+[2026-11-09T16:24:59.731Z] [INFO] Building FinSecure Pay 1.1.0
+[2026-11-09T16:24:59.731Z] [INFO]   from pom.xml
+[2026-11-09T16:24:59.731Z] [INFO] --------------------------------[ jar ]---------------------------------
+[2026-11-09T16:25:00.643Z] [INFO] 
+[2026-11-09T16:25:00.643Z] [INFO] --- resources:3.5.0:resources (default-resources) @ finsecure-pay ---
+[2026-11-09T16:25:00.643Z] [INFO] Copying 1 resource from src/main/resources to target/classes
+[2026-11-09T16:25:00.643Z] [INFO] Copying 0 resource from src/main/resources to target/classes
+[2026-11-09T16:25:00.643Z] [INFO] 
+[2026-11-09T16:25:00.643Z] [INFO] --- compiler:3.15.0:compile (default-compile) @ finsecure-pay ---
+[2026-11-09T16:25:00.894Z] [INFO] Nothing to compile - all classes are up to date.
+[2026-11-09T16:25:00.894Z] [INFO] 
+[2026-11-09T16:25:00.894Z] [INFO] --- resources:3.5.0:testResources (default-testResources) @ finsecure-pay ---
+[2026-11-09T16:25:00.894Z] [INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/finsecure-pay/src/test/resources
+[2026-11-09T16:25:00.894Z] [INFO] 
+[2026-11-09T16:25:00.894Z] [INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ finsecure-pay ---
+[2026-11-09T16:25:00.894Z] [INFO] Nothing to compile - all classes are up to date.
+[2026-11-09T16:25:00.894Z] [INFO] 
+[2026-11-09T16:25:00.894Z] [INFO] --- surefire:3.5.6:test (default-test) @ finsecure-pay ---
+[2026-11-09T16:25:01.145Z] [INFO] Tests are skipped.
+[2026-11-09T16:25:01.145Z] [INFO] 
+[2026-11-09T16:25:01.145Z] [INFO] --- jar:3.5.1:jar (default-jar) @ finsecure-pay ---
+[2026-11-09T16:25:01.398Z] [INFO] Building jar: /var/jenkins_home/workspace/finsecure-pay/target/finsecure-pay.jar
+[2026-11-09T16:25:01.649Z] [INFO] 
+[2026-11-09T16:25:01.649Z] [INFO] --- spring-boot:4.1.1:repackage (repackage) @ finsecure-pay ---
+[2026-11-09T16:25:02.199Z] [INFO] Replacing main artifact /var/jenkins_home/workspace/finsecure-pay/target/finsecure-pay.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[2026-11-09T16:25:02.199Z] [INFO] The original artifact has been renamed to /var/jenkins_home/workspace/finsecure-pay/target/finsecure-pay.jar.original
+[2026-11-09T16:25:02.199Z] [INFO] ------------------------------------------------------------------------
+[2026-11-09T16:25:02.200Z] [INFO] BUILD SUCCESS
+[2026-11-09T16:25:02.200Z] [INFO] ------------------------------------------------------------------------
+[2026-11-09T16:25:02.200Z] [INFO] Total time:  3.040 s
+[2026-11-09T16:25:02.200Z] [INFO] Finished at: 2026-11-09T16:25:02Z
+[2026-11-09T16:25:02.200Z] [INFO] ------------------------------------------------------------------------
+[Pipeline] archiveArtifacts
+[2026-11-09T16:25:02.230Z] Archiving artifacts
+[2026-11-09T16:25:02.251Z] Recording fingerprints
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Security Checks)
+[Pipeline] sh
+[2026-11-09T16:25:02.696Z] + mvn -B -ntp spotbugs:check
+[2026-11-09T16:25:04.558Z] [INFO] Scanning for projects...
+[2026-11-09T16:25:05.109Z] [INFO] 
+[2026-11-09T16:25:05.109Z] [INFO] --------------------< com.finsecure:finsecure-pay >---------------------
+[2026-11-09T16:25:05.109Z] [INFO] Building FinSecure Pay 1.1.0
+[2026-11-09T16:25:05.109Z] [INFO]   from pom.xml
+[2026-11-09T16:25:05.109Z] [INFO] --------------------------------[ jar ]---------------------------------
+[2026-11-09T16:25:05.109Z] [INFO] 
+[2026-11-09T16:25:05.109Z] [INFO] >>> spotbugs:4.9.3.0:check (default-cli) > :spotbugs @ finsecure-pay >>>
+[2026-11-09T16:25:05.660Z] [INFO] 
+[2026-11-09T16:25:05.660Z] [INFO] --- spotbugs:4.9.3.0:spotbugs (spotbugs) @ finsecure-pay ---
+[2026-11-09T16:25:07.522Z] [INFO] Fork Value is true
+[2026-11-09T16:25:14.007Z] [INFO] Done SpotBugs Analysis....
+[2026-11-09T16:25:14.257Z] [WARNING] Unable to find a URL to the parent project. The parent menu will NOT be added.
+[2026-11-09T16:25:14.257Z] [INFO] Rendering content with org.apache.maven.skins:maven-fluido-skin:jar:2.0.0-M9 skin
+[2026-11-09T16:25:14.809Z] [INFO] 
+[2026-11-09T16:25:14.809Z] [INFO] <<< spotbugs:4.9.3.0:check (default-cli) < :spotbugs @ finsecure-pay <<<
+[2026-11-09T16:25:14.809Z] [INFO] 
+[2026-11-09T16:25:14.809Z] [INFO] 
+[2026-11-09T16:25:14.809Z] [INFO] --- spotbugs:4.9.3.0:check (default-cli) @ finsecure-pay ---
+[2026-11-09T16:25:15.060Z] [INFO] BugInstance size is 0
+[2026-11-09T16:25:15.060Z] [INFO] Error size is 0
+[2026-11-09T16:25:15.060Z] [INFO] No errors/warnings found
+[2026-11-09T16:25:15.060Z] [INFO] ------------------------------------------------------------------------
+[2026-11-09T16:25:15.060Z] [INFO] BUILD SUCCESS
+[2026-11-09T16:25:15.060Z] [INFO] ------------------------------------------------------------------------
+[2026-11-09T16:25:15.060Z] [INFO] Total time:  10.466 s
+[2026-11-09T16:25:15.060Z] [INFO] Finished at: 2026-11-09T16:25:14Z
+[2026-11-09T16:25:15.060Z] [INFO] ------------------------------------------------------------------------
+[Pipeline] sh
+[2026-11-09T16:25:15.342Z] + mkdir -p reports
+[2026-11-09T16:25:15.342Z] + trivy fs --scanners vuln,misconfig,secret --severity HIGH,CRITICAL --format table --output reports/trivy-fs.txt --exit-code 0 .
+[2026-11-09T16:25:15.342Z] 2026-11-09T16:25:15Z	INFO	[vuln] Vulnerability scanning is enabled
+[2026-11-09T16:25:15.342Z] 2026-11-09T16:25:15Z	INFO	[misconfig] Misconfiguration scanning is enabled
+[2026-11-09T16:25:15.342Z] 2026-11-09T16:25:15Z	INFO	[checks-client] Using existing checks from cache	path="/var/jenkins_home/.cache/trivy/policy/content"
+[2026-11-09T16:25:17.204Z] 2026-11-09T16:25:16Z	INFO	[secret] Secret scanning is enabled
+[2026-11-09T16:25:17.204Z] 2026-11-09T16:25:16Z	INFO	[secret] If your scanning is slow, please try '--scanners vuln,misconfig' to disable secret scanning
+[2026-11-09T16:25:17.204Z] 2026-11-09T16:25:16Z	INFO	[secret] Please see https://trivy.dev/docs/v0.76/guide/scanner/secret#recommendation for faster secret detection
+[2026-11-09T16:25:17.455Z] 2026-11-09T16:25:17Z	WARN	[pip] Unable to find python `site-packages` directory. License detection is skipped.	err="unable to find path to Python executable"
+[2026-11-09T16:25:17.708Z] 2026-11-09T16:25:17Z	INFO	Number of language-specific files	num=1
+[2026-11-09T16:25:17.708Z] 2026-11-09T16:25:17Z	INFO	[pom] Detecting vulnerabilities...
+[2026-11-09T16:25:17.708Z] 2026-11-09T16:25:17Z	INFO	Detected config files	num=11
+[2026-11-09T16:25:17.959Z] + cat reports/trivy-fs.txt
+[2026-11-09T16:25:17.959Z] 
+[2026-11-09T16:25:17.959Z] Report Summary
+[2026-11-09T16:25:17.959Z] 
+[2026-11-09T16:25:17.959Z] ┌─────────────────────────────────────────────┬────────────┬─────────────────┬───────────────────┬─────────┐
+[2026-11-09T16:25:17.959Z] │                   Target                    │    Type    │ Vulnerabilities │ Misconfigurations │ Secrets │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ pom.xml                                     │    pom     │        3        │         -         │    -    │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ Dockerfile                                  │ dockerfile │        -        │         0         │    -    │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ jenkins/Dockerfile                          │ dockerfile │        -        │         0         │    -    │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ k8s/configmap.yaml                          │ kubernetes │        -        │         0         │    -    │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ k8s/deployment.yaml                         │ kubernetes │        -        │         0         │    -    │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ k8s/namespace.yaml                          │ kubernetes │        -        │         0         │    -    │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ k8s/pdb.yaml                                │ kubernetes │        -        │         0         │    -    │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ k8s/secret.example.yaml                     │ kubernetes │        -        │         0         │    -    │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ k8s/service.yaml                            │ kubernetes │        -        │         0         │    -    │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ k8s/servicemonitor.yaml                     │ kubernetes │        -        │         0         │    -    │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ monitoring/grafana-dashboard-configmap.yaml │ kubernetes │        -        │         0         │    -    │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────────────┼────────────┼─────────────────┼───────────────────┼─────────┤
+[2026-11-09T16:25:17.959Z] │ monitoring/prometheus-rules.yaml            │ kubernetes │        -        │         0         │    -    │
+[2026-11-09T16:25:17.959Z] └─────────────────────────────────────────────┴────────────┴─────────────────┴───────────────────┴─────────┘
+[2026-11-09T16:25:17.959Z] Legend:
+[2026-11-09T16:25:17.959Z] - '-': Not scanned
+[2026-11-09T16:25:17.959Z] - '0': Clean (no security findings detected)
+[2026-11-09T16:25:17.959Z] 
+[2026-11-09T16:25:17.959Z] 
+[2026-11-09T16:25:17.959Z] For OSS Maintainers: VEX Notice
+[2026-11-09T16:25:17.959Z] --------------------------------
+[2026-11-09T16:25:17.959Z] If you're an OSS maintainer and Trivy has detected vulnerabilities in your project that you believe are not actually exploitable, consider issuing a VEX (Vulnerability Exploitability eXchange) statement.
+[2026-11-09T16:25:17.959Z] VEX allows you to communicate the actual status of vulnerabilities in your project, improving security transparency and reducing false positives for your users.
+[2026-11-09T16:25:17.959Z] Learn more and start using VEX: https://trivy.dev/docs/v0.76/guide/supply-chain/vex/repo#publishing-vex-documents
+[2026-11-09T16:25:17.959Z] 
+[2026-11-09T16:25:17.959Z] To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
+[2026-11-09T16:25:17.959Z] 
+[2026-11-09T16:25:17.959Z] 
+[2026-11-09T16:25:17.959Z] pom.xml (pom)
+[2026-11-09T16:25:17.959Z] =============
+[2026-11-09T16:25:17.959Z] Total: 3 (HIGH: 1, CRITICAL: 2)
+[2026-11-09T16:25:17.959Z] 
+[2026-11-09T16:25:17.959Z] ┌─────────────────────────────────────┬────────────────┬──────────┬────────┬───────────────────┬───────────────────────┬────────────────────────────────────────────────────────────┐
+[2026-11-09T16:25:17.959Z] │               Library               │ Vulnerability  │ Severity │ Status │ Installed Version │     Fixed Version     │                           Title                            │
+[2026-11-09T16:25:17.959Z] ├─────────────────────────────────────┼────────────────┼──────────┼────────┼───────────────────┼───────────────────────┼────────────────────────────────────────────────────────────┤
+[2026-11-09T16:25:17.959Z] │ org.apache.logging.log4j:log4j-core │ CVE-2021-44228 │ CRITICAL │ fixed  │ 2.14.1            │ 2.15.0, 2.3.1, 2.12.2 │ log4j-core: Remote code execution in Log4j 2.x when logs   │
+[2026-11-09T16:25:17.959Z] │                                     │                │          │        │                   │                       │ contain an attacker-controlled...                          │
+[2026-11-09T16:25:17.959Z] │                                     │                │          │        │                   │                       │ https://avd.aquasec.com/nvd/cve-2021-44228                 │
+[2026-11-09T16:25:17.959Z] │                                     ├────────────────┤          │        │                   ├───────────────────────┼────────────────────────────────────────────────────────────┤
+[2026-11-09T16:25:17.959Z] │                                     │ CVE-2021-45046 │          │        │                   │ 2.16.0, 2.12.2, 2.3.1 │ log4j-core: DoS in log4j 2.x with thread context message   │
+[2026-11-09T16:25:17.959Z] │                                     │                │          │        │                   │                       │ pattern and context...                                     │
+[2026-11-09T16:25:17.959Z] │                                     │                │          │        │                   │                       │ https://avd.aquasec.com/nvd/cve-2021-45046                 │
+[2026-11-09T16:25:17.959Z] │                                     ├────────────────┼──────────┤        │                   ├───────────────────────┼────────────────────────────────────────────────────────────┤
+[2026-11-09T16:25:17.959Z] │                                     │ CVE-2021-45105 │ HIGH     │        │                   │ 2.12.3, 2.17.0, 2.3.1 │ log4j-core: DoS in log4j 2.x with Thread Context Map (MDC) │
+[2026-11-09T16:25:17.959Z] │                                     │                │          │        │                   │                       │ input data...                                              │
+[2026-11-09T16:25:17.959Z] │                                     │                │          │        │                   │                       │ https://avd.aquasec.com/nvd/cve-2021-45105                 │
+[2026-11-09T16:25:17.959Z] └─────────────────────────────────────┴────────────────┴──────────┴────────┴───────────────────┴───────────────────────┴────────────────────────────────────────────────────────────┘
+[2026-11-09T16:25:17.959Z] + trivy fs --scanners vuln,secret --severity CRITICAL --exit-code 1 --no-progress .
+[2026-11-09T16:25:18.210Z] 2026-11-09T16:25:18Z	INFO	[vuln] Vulnerability scanning is enabled
+[2026-11-09T16:25:18.210Z] 2026-11-09T16:25:18Z	INFO	[secret] Secret scanning is enabled
+[2026-11-09T16:25:18.210Z] 2026-11-09T16:25:18Z	INFO	[secret] If your scanning is slow, please try '--scanners vuln' to disable secret scanning
+[2026-11-09T16:25:18.210Z] 2026-11-09T16:25:18Z	INFO	[secret] Please see https://trivy.dev/docs/v0.76/guide/scanner/secret#recommendation for faster secret detection
+[2026-11-09T16:25:18.761Z] 2026-11-09T16:25:18Z	WARN	[pip] Unable to find python `site-packages` directory. License detection is skipped.	err="unable to find path to Python executable"
+[2026-11-09T16:25:18.761Z] 2026-11-09T16:25:18Z	INFO	Number of language-specific files	num=1
+[2026-11-09T16:25:18.761Z] 2026-11-09T16:25:18Z	INFO	[pom] Detecting vulnerabilities...
+[2026-11-09T16:25:18.761Z] 
+[2026-11-09T16:25:18.761Z] Report Summary
+[2026-11-09T16:25:18.761Z] 
+[2026-11-09T16:25:18.761Z] ┌─────────┬──────┬─────────────────┬─────────┐
+[2026-11-09T16:25:18.761Z] │ Target  │ Type │ Vulnerabilities │ Secrets │
+[2026-11-09T16:25:18.761Z] ├─────────┼──────┼─────────────────┼─────────┤
+[2026-11-09T16:25:18.761Z] │ pom.xml │ pom  │        2        │    -    │
+[2026-11-09T16:25:18.761Z] └─────────┴──────┴─────────────────┴─────────┘
+[2026-11-09T16:25:18.761Z] Legend:
+[2026-11-09T16:25:18.761Z] - '-': Not scanned
+[2026-11-09T16:25:18.761Z] - '0': Clean (no security findings detected)
+[2026-11-09T16:25:18.761Z] 
+[2026-11-09T16:25:18.761Z] 
+[2026-11-09T16:25:18.761Z] For OSS Maintainers: VEX Notice
+[2026-11-09T16:25:18.761Z] --------------------------------
+[2026-11-09T16:25:18.761Z] If you're an OSS maintainer and Trivy has detected vulnerabilities in your project that you believe are not actually exploitable, consider issuing a VEX (Vulnerability Exploitability eXchange) statement.
+[2026-11-09T16:25:18.761Z] VEX allows you to communicate the actual status of vulnerabilities in your project, improving security transparency and reducing false positives for your users.
+[2026-11-09T16:25:18.761Z] Learn more and start using VEX: https://trivy.dev/docs/v0.76/guide/supply-chain/vex/repo#publishing-vex-documents
+[2026-11-09T16:25:18.761Z] 
+[2026-11-09T16:25:18.761Z] To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
+[2026-11-09T16:25:18.761Z] 
+[2026-11-09T16:25:18.761Z] 
+[2026-11-09T16:25:18.761Z] pom.xml (pom)
+[2026-11-09T16:25:18.761Z] =============
+[2026-11-09T16:25:18.761Z] Total: 2 (CRITICAL: 2)
+[2026-11-09T16:25:18.761Z] 
+[2026-11-09T16:25:18.761Z] ┌─────────────────────────────────────┬────────────────┬──────────┬────────┬───────────────────┬───────────────────────┬──────────────────────────────────────────────────────────┐
+[2026-11-09T16:25:18.761Z] │               Library               │ Vulnerability  │ Severity │ Status │ Installed Version │     Fixed Version     │                          Title                           │
+[2026-11-09T16:25:18.761Z] ├─────────────────────────────────────┼────────────────┼──────────┼────────┼───────────────────┼───────────────────────┼──────────────────────────────────────────────────────────┤
+[2026-11-09T16:25:18.761Z] │ org.apache.logging.log4j:log4j-core │ CVE-2021-44228 │ CRITICAL │ fixed  │ 2.14.1            │ 2.15.0, 2.3.1, 2.12.2 │ log4j-core: Remote code execution in Log4j 2.x when logs │
+[2026-11-09T16:25:18.761Z] │                                     │                │          │        │                   │                       │ contain an attacker-controlled...                        │
+[2026-11-09T16:25:18.761Z] │                                     │                │          │        │                   │                       │ https://avd.aquasec.com/nvd/cve-2021-44228               │
+[2026-11-09T16:25:18.761Z] │                                     ├────────────────┤          │        │                   ├───────────────────────┼──────────────────────────────────────────────────────────┤
+[2026-11-09T16:25:18.761Z] │                                     │ CVE-2021-45046 │          │        │                   │ 2.16.0, 2.12.2, 2.3.1 │ log4j-core: DoS in log4j 2.x with thread context message │
+[2026-11-09T16:25:18.761Z] │                                     │                │          │        │                   │                       │ pattern and context...                                   │
+[2026-11-09T16:25:18.761Z] │                                     │                │          │        │                   │                       │ https://avd.aquasec.com/nvd/cve-2021-45046               │
+[2026-11-09T16:25:18.761Z] └─────────────────────────────────────┴────────────────┴──────────┴────────┴───────────────────┴───────────────────────┴──────────────────────────────────────────────────────────┘
+Post stage
+[Pipeline] archiveArtifacts
+[2026-11-09T16:25:18.806Z] Archiving artifacts
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Container Build)
+Stage "Container Build" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Image Scan)
+Stage "Image Scan" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Push)
+Stage "Push" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+Stage "Deploy" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Smoke Test)
+Stage "Smoke Test" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] sh
+[2026-11-09T16:25:19.836Z] + docker image prune -f
+[Pipeline] cleanWs
+[2026-11-09T16:25:19.866Z] [WS-CLEANUP] Deleting project workspace...
+[2026-11-09T16:25:19.866Z] [WS-CLEANUP] Deferred wipeout is used...
+[2026-11-09T16:25:19.876Z] [WS-CLEANUP] done
+[Pipeline] emailext
+[2026-11-09T16:25:19.924Z] Request made to compress build log
+[2026-11-09T16:25:19.937Z] Sending email to: jason.rockie@gmail.com
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE

@@ -30,7 +30,9 @@ alertmanager:
       smtp_auth_password: "REPLACE_AT_INSTALL"      # --set alertmanager.config.global.smtp_auth_password
       smtp_require_tls: true
     route:
-      receiver: email-ops
+      # Default receiver is a sink: the chart's built-in alerts (Watchdog, KubeSchedulerDown,
+      # KubeProxyDown, which always fire on GKE's managed control plane) would otherwise be emailed.
+      receiver: "null"
       group_by: ["alertname", "namespace"]
       group_wait: 30s
       group_interval: 2m
@@ -39,6 +41,7 @@ alertmanager:
         - receiver: email-ops
           matchers: ["namespace = finsecure"]
     receivers:
+      - name: "null"
       - name: email-ops
         email_configs:
           - to: "jason.rockie@gmail.com"
