@@ -55,12 +55,6 @@
       <artifactId>spring-boot-starter-micrometer-metrics-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- DEMO ONLY: vulnerable version, CVE-2021-44228 (CRITICAL). The security gate must block this. -->
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>2.14.1</version>
-    </dependency>
   </dependencies>
 
   <build>
