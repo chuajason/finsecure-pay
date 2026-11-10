@@ -63,7 +63,7 @@ function stat(slide, big, label, x, y, w) {
     { text: 'Repository: ' + REPO, options: { hyperlink: { url: REPO }, breakLine: true } },
     { text: 'Image: hub.docker.com/r/chuajason/finsecure-pay', options: { hyperlink: { url: 'https://hub.docker.com/r/chuajason/finsecure-pay' } } },
   ], { placeholder: 'body' });
-  s.addNotes('Title. 45 seconds. State the business problem from the brief and that everything shown is live; start the pipeline run right after this slide.');
+  s.addNotes('Capstone submission. All screenshots in this deck are from the deployed environment; the originals are in docs/evidence in the repository, named by task.');
 
   // 2 Overview and business problem
   s = pres.addSlide({ masterName: 'CONTENT', sectionTitle: 'Overview' });
@@ -84,7 +84,7 @@ function stat(slide, big, label, x, y, w) {
     ['15', 'JUnit tests on every build'], ['2', 'replicas, never fewer than 2 ready during a rollout'],
     ['4', 'Prometheus alert rules, email on fire and resolve'], ['16', 'CRITICAL CVEs the gate found in my own first image']];
   stats.forEach(([b, l], i) => stat(s, b, l, 7.35 + (i % 2) * 2.8, 1.6 + Math.floor(i / 2) * 1.75, 2.6));
-  s.addNotes('Overview. 45 seconds. Left: the business problem; right: the numbers that summarise what was built and exercised.');
+  s.addNotes('Left: the business problem from the brief. Right: the numbers that summarise what was built and exercised.');
 
   // 3 Application and Git
   pres.addSection({ title: 'Build' });
@@ -98,7 +98,7 @@ function stat(slide, big, label, x, y, w) {
     'Public repo chuajason/finsecure-pay. The history is real, including the failing Actions runs that drove the Boot 4 upgrade'], 0.6, 1.35, 6.0, 5.5, 14);
   await shot(s, E + 'T1-tests.png', 6.9, 1.35, 5.9, 1.4, 'mvn test: 15 tests, 0 failures');
   await shot(s, S + 'github-commits.png', 6.9, 3.1, 5.9, 3.6, 'Commit history with the Actions result on each commit');
-  s.addNotes('Application and Git. 60 seconds. Point at the commit list: red crosses are the CVE-driven upgrade, not noise.');
+  s.addNotes('Task 1. The red crosses in the commit list are the CVE-driven Spring Boot upgrade, kept in the history deliberately. Evidence: T1-*.png.');
 
   // 4 Container and Kubernetes
   s = pres.addSlide({ masterName: 'CONTENT', sectionTitle: 'Build' });
@@ -116,7 +116,7 @@ function stat(slide, big, label, x, y, w) {
   await shot(s, E + 'T4-rollout.png', 6.6, 2.55, 3.5, 3.2, 'Rolling update: new pod Ready before old pod terminates');
   await shot(s, E + 'T3-recovery.png', 10.3, 2.55, 2.5, 1.2, 'Deleted pod recreated in 35 s');
   await shot(s, E + 'T3-external-health.png', 10.3, 4.15, 2.5, 1.6, '/health through the external IP');
-  s.addNotes('Container and Kubernetes. 75 seconds. Then switch to Cloud Shell for get pods and the health curl.');
+  s.addNotes('Tasks 2 and 3. Evidence: T2-*.png (build, run, Docker Hub) and T3-*.png (pods, service, probes, recovery).');
 
   // 5 CI/CD
   pres.addSection({ title: 'Deliver' });
@@ -129,7 +129,7 @@ function stat(slide, big, label, x, y, w) {
     'ROLLBACK parameter: skip the build, roll back in one click (build #4, 82 s, back to 1.0.0)',
     'GitHub webhook starts builds; SCM polling as fallback. Email with console log and scan reports on every result',
     'Build #2: controlled failing test, pipeline red at Test, production untouched, FAILED email'], 9.0, 1.3, 3.8, 5.6, 12);
-  s.addNotes('CI/CD. 90 seconds. Switch to Jenkins live: the build started at the beginning should be mid-pipeline. Click #2 to show the Test stage and skipped stages.');
+  s.addNotes('Task 4. Builds #1 to #10 are the record: success, failed test, release, rollback, redeploy, blocked, remediation, metrics fix. Evidence: T4-*.png.');
 
   // 6 DevSecOps
   s = pres.addSlide({ masterName: 'CONTENT', sectionTitle: 'Deliver' });
@@ -142,7 +142,7 @@ function stat(slide, big, label, x, y, w) {
     'Credentials: Docker Hub and Gmail in Jenkins credentials (masked); GKE access through the VM service account, container.developer only; app secret is a Kubernetes Secret created by hand, required, checked before deploy',
     'Jenkins UI reachable only from my IP and GitHub webhook ranges'], 8.5, 1.3, 4.3, 3.9, 11.5);
   await shot(s, E + 'T5-secrets-jenkins.png', 8.5, 5.3, 4.3, 1.3, 'Jenkins credentials, values masked');
-  s.addNotes('DevSecOps. 90 seconds. Show build #6 console with the Trivy table, then Manage Jenkins, Credentials.');
+  s.addNotes('Task 5. Build #6 console log with the Trivy table is T5-build6-console.txt; secrets evidence is T5-secrets-*.png (value redacted).');
 
   // 7 Monitoring
   pres.addSection({ title: 'Operate' });
@@ -158,7 +158,7 @@ function stat(slide, big, label, x, y, w) {
     'Structured log line per validation to stdout; kubectl logs per pod, Cloud Logging across pods',
     'Lesson: Boot publishes no histogram buckets by default; p95 was empty until build #8 fixed it. And a wrong Gmail app password only shows in Alertmanager logs (535)'], 7.2, 3.3, 5.6, 3.6, 11.5);
   await shot(s, E + 'T6-email-inbox-lifecycle.png', 0.6, 5.4, 6.3, 0.8, 'FIRING, RESOLVED and Jenkins emails in one inbox');
-  s.addNotes('Monitoring. 2 minutes. Switch to Grafana live, then Alert rules, then Gmail, then Logs Explorer.');
+  s.addNotes('Task 6. Alert lifecycle Pending, Firing, email, Resolved is T6-alert-*.png and T6-email-*.png; logs are T6-logs-*.png.');
 
   // 8 Architecture
   s = pres.addSlide({ masterName: 'CONTENT', sectionTitle: 'Operate' });
@@ -191,7 +191,7 @@ function stat(slide, big, label, x, y, w) {
     tag(s, i + 1, 7.5, y + 0.02);
     s.addText([{ text: h, options: { bold: true, color: C.text2, breakLine: true } }, { text: t, options: { color: C.text1 } }], { x: 8.05, y, w: 4.75, h: 1.08, fontSize: 11, valign: 'top', margin: 0, isTextBox: true });
   });
-  s.addNotes('AI use case. 90 seconds. Run the watcher live in Cloud Shell against the port-forwarded Prometheus and read the flagged windows.');
+  s.addNotes('Task 7. ai/anomaly_watch.py in the repository; output and plot are T7-anomaly-output.png and T7-anomaly-plot.png. 148 samples because the pods were replaced partway through the hour.');
 
   // 10 Results, lessons, links
   pres.addSection({ title: 'Close' });
@@ -221,7 +221,7 @@ function stat(slide, big, label, x, y, w) {
     { text: 'Repository and evidence: ', options: { bold: true } }, { text: REPO, options: { hyperlink: { url: REPO } } },
     { text: '   Design document: docs/FinSecure_Pay_Design_Document.docx   Test evidence: docs/FinSecure_Pay_Test_Evidence.docx   Evidence screenshots: docs/evidence/', options: {} },
   ], { x: 0.6, y: 6.45, w: 12.2, h: 0.5, fontSize: 10.5, color: C.text1, margin: 0, isTextBox: true, valign: 'top' });
-  s.addNotes('Close. 60 seconds. Walk the table, then the lessons, then links. Stop recording.');
+  s.addNotes('Test cases map to the brief; the companion document FinSecure_Pay_Test_Evidence.docx lists the evidence file for each row.');
 
   const out = 'docs/FinSecure_Pay_Capstone.pptx';
   await pres.writeFile({ fileName: out });
