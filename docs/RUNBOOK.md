@@ -274,9 +274,11 @@ Between sessions, from Cloud Shell:
 
 ```bash
 export PROJECT_ID=$(gcloud config get-value project)
-scripts/gcp-pause.sh                              # stop the VM, scale nodes to zero
-MY_IP=<your public IP> scripts/gcp-pause.sh resume   # refresh the Jenkins firewall for your current IP, then bring everything back (about 5 minutes)
+scripts/gcp-pause.sh                              # stop the VM, scale the app to 0, scale nodes to zero
+MY_IP=<your public IP> scripts/gcp-pause.sh resume   # refresh the Jenkins firewall for your current IP, then bring everything back (about 5 to 8 minutes)
 ```
+
+Pause scales the Deployment to 0 before resizing the node pool, because the PodDisruptionBudget (minAvailable 1) otherwise blocks the drain of the last pod and the resize hangs. Resume reverses it: nodes back to 2, waits for them to be Ready, scales the Deployment to 2 (or the HPA minimum if one exists) and waits for the rollout. If resume is interrupted, finish by hand with `kubectl -n finsecure scale deployment/finsecure-pay --replicas=2` and `kubectl -n finsecure rollout status deployment/finsecure-pay`.
 
 Get the IP from whatismyip.com in your browser, not from Cloud Shell. Static addresses do not change: Jenkins http://34.126.137.15:8080, app http://35.197.154.237, Grafana http://34.177.101.0.
 
