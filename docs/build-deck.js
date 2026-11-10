@@ -61,8 +61,7 @@ function stat(slide, big, label, x, y, w) {
     { text: 'A Spring Boot transaction validation API delivered from a Git push to a monitored, alerting service on Google Kubernetes Engine by Jenkins, with security gates that block the release.', options: { breakLine: true } },
     { text: ' ', options: { breakLine: true } },
     { text: 'Repository: ' + REPO, options: { hyperlink: { url: REPO }, breakLine: true } },
-    { text: 'Image: hub.docker.com/r/chuajason/finsecure-pay', options: { hyperlink: { url: 'https://hub.docker.com/r/chuajason/finsecure-pay' }, breakLine: true } },
-    { text: 'Recording: [link added at submission]', options: {} },
+    { text: 'Image: hub.docker.com/r/chuajason/finsecure-pay', options: { hyperlink: { url: 'https://hub.docker.com/r/chuajason/finsecure-pay' } } },
   ], { placeholder: 'body' });
   s.addNotes('Title. 45 seconds. State the business problem from the brief and that everything shown is live; start the pipeline run right after this slide.');
 
@@ -220,7 +219,7 @@ function stat(slide, big, label, x, y, w) {
   bullets(s, ['Staging namespace with a promotion step', 'HTTPS with a managed certificate; TLS for Jenkins and Grafana', 'Least-privilege IAM and RBAC for the Jenkins service account; rootless image builds', 'HPA on request rate; anomaly watcher as a CronJob with its own alert'], 8.8, 4.7, 4.0, 1.6, 10.5);
   s.addText([
     { text: 'Repository and evidence: ', options: { bold: true } }, { text: REPO, options: { hyperlink: { url: REPO } } },
-    { text: '   Design document: docs/FinSecure_Pay_Design_Document.docx   Demo script: docs/DEMO_SCRIPT.md   Recording: [link added at submission]', options: {} },
+    { text: '   Design document: docs/FinSecure_Pay_Design_Document.docx   Test evidence: docs/FinSecure_Pay_Test_Evidence.docx   Evidence screenshots: docs/evidence/', options: {} },
   ], { x: 0.6, y: 6.45, w: 12.2, h: 0.5, fontSize: 10.5, color: C.text1, margin: 0, isTextBox: true, valign: 'top' });
   s.addNotes('Close. 60 seconds. Walk the table, then the lessons, then links. Stop recording.');
 
