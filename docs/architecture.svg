@@ -92,10 +92,10 @@
 <text x="970.0" y="971" text-anchor="middle" font-size="13" fill="#374151">container stdout, all pods</text>
 <text x="970.0" y="990" text-anchor="middle" font-size="13" fill="#374151">Logs Explorer by namespace</text>
 <rect x="1190" y="930" width="270" height="110" rx="6" fill="#FFFFFF" stroke="#555555" stroke-width="2"/>
-<text x="1325.0" y="952" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">AI anomaly watcher</text>
+<text x="1325.0" y="952" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">AI anomaly watcher (run by hand)</text>
 <text x="1325.0" y="971" text-anchor="middle" font-size="13" fill="#374151">ai/anomaly_watch.py, Isolation Forest</text>
 <text x="1325.0" y="990" text-anchor="middle" font-size="13" fill="#374151">over req/s, rejected share, p95</text>
-<text x="1325.0" y="1009" text-anchor="middle" font-size="13" fill="#374151">reads Prometheus query_range</text>
+<text x="1325.0" y="1009" text-anchor="middle" font-size="13" fill="#374151">CronJob and alert: future work</text>
 <rect x="1500" y="930" width="300" height="110" rx="6" fill="#FFFFFF" stroke="#555555" stroke-width="2"/>
 <text x="1650.0" y="952" text-anchor="middle" font-size="15" font-weight="bold" fill="#1F2937">Gmail (jason.rockie@gmail.com)</text>
 <text x="1650.0" y="971" text-anchor="middle" font-size="13" fill="#374151">Jenkins SUCCESS / FAILED emails</text>
@@ -116,7 +116,7 @@
 <text x="700" y="88" font-size="13" font-weight="bold" fill="#111827">6 HTTP requests (clients, load generator, Jenkins smoke test)</text>
 <path d="M1560,280 L1530,280" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
 <path d="M1330,360 L1330,380" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
-<path d="M1590,360 L1590,380" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M1500,360 L1500,380" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>
 <path d="M1450,560 L1450,360" fill="none" stroke="#333333" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ah)"/>
 <text x="1460" y="498" font-size="13" font-weight="bold" fill="#111827">7 scrape /actuator/prometheus</text>
 <path d="M1480,615 L1530,615" fill="none" stroke="#333333" stroke-width="2" marker-end="url(#ah)"/>

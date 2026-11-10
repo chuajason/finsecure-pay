@@ -1,4 +1,4 @@
-# FinSecure Pay: recording script (target 12 minutes, hard limit 15)
+# FinSecure Pay: recording script (target 13 minutes, hard limit 15)
 
 One recording, presentation and demo together. Screen share with the slide deck open, a browser
 with tabs for GitHub, Jenkins, Grafana and Gmail, and one Cloud Shell window with two tabs.
@@ -58,7 +58,15 @@ were all webhook-started."
 Switch to Jenkins. Point at the new build appearing in the Builds list. "That is build #N
 starting from the webhook. It takes about 6 minutes. Back to the slides."
 
-## 1:15 Slide 2, application and Git (60 s)
+## 1:15 Slide 2, the problem (45 s)
+
+"Three problems from the brief, three answers. Manual deployments with downtime become a
+pipeline with a rolling update that never drops below two ready pods. Finding out from
+customers becomes Prometheus alerts that email me, plus logs I can query across pods. No
+consistent security checks becomes two scanners that fail the build on any CRITICAL. The
+rest of the talk is evidence for those three claims."
+
+## 2:00 Slide 3, application and Git (60 s)
 
 "Spring Boot 4 on Java 21. One endpoint that matters, POST /validate, with 8 rules whose limits
 come from a Kubernetes ConfigMap, not the code. GET /health reports version and start time and
@@ -68,7 +76,7 @@ history is the real history of this project, including the mistakes."
 
 Switch to GitHub briefly, scroll the commit list, point at a failure and its fix. Back to slides.
 
-## 2:15 Slide 3, container and Kubernetes (75 s)
+## 3:00 Slide 4, container and Kubernetes (75 s)
 
 "Multi-stage Dockerfile, layered jar so the dependency layer is cached, Temurin 21 JRE on
 Alpine, non-root user 10001, read-only root filesystem, all capabilities dropped. On GKE: 2
@@ -87,7 +95,7 @@ curl -s http://35.197.154.237/health; echo
 
 "Two pods, external IP, health UP with the version before this recording."
 
-## 3:30 Slide 4, CI/CD pipeline (90 s)
+## 4:15 Slide 5, CI/CD pipeline (90 s)
 
 "Ten stages. The order matters: nothing is pushed to the registry or deployed until the tests
 and two security scans have passed. Version tag is pom version, build number and short SHA, so
@@ -102,7 +110,7 @@ the security gate, #7 the remediation. And the current one running now."
 
 Click build #2, show the Test stage red and later stages skipped. "Failed tests do not deploy."
 
-## 5:00 Slide 5, DevSecOps (90 s)
+## 5:45 Slide 6, DevSecOps (90 s)
 
 "Three checks in the pipeline. SpotBugs for code quality, fails on high priority bugs. Trivy on
 the repository: dependencies, Dockerfile and Kubernetes misconfiguration, secrets. Trivy on the
@@ -114,14 +122,15 @@ green."
 Switch to Jenkins build #6, Console Output, scroll to the Trivy table with CVE-2021-44228
 CRITICAL. Then Manage Jenkins, Credentials: "Docker Hub and Gmail credentials live here, masked.
 The application secret is a Kubernetes Secret created by hand and never in Git; the pipeline
-refuses to deploy if it is missing. The Jenkins VM authenticates to GKE through a service account
+refuses to deploy if it is missing. To be precise about what that proves: it proves the secret
+path, injection and never printed; /validate does not yet authenticate callers with it. The Jenkins VM authenticates to GKE through a service account
 with the container developer role only, no key files."
 
 "Worth saying: the same scanning found 16 CRITICAL findings in my own first image, in Tomcat
 and Spring, which is what pushed me from Spring Boot 3.4 to 4.1 with patched Tomcat and Jackson.
 The gate did its job on me before it did it on the demo."
 
-## 6:30 Slide 6, monitoring, alerting, logging (120 s)
+## 7:15 Slide 7, monitoring, alerting, logging (120 s)
 
 "kube-prometheus-stack via Helm. A ServiceMonitor scrapes Actuator. Grafana dashboard with 6
 panels: request rate by status, approved against rejected, p95 and p50 latency, rejection share,
@@ -139,7 +148,19 @@ minute, firing 2 minutes later, email 30 seconds after that, resolved when the l
 Then Cloud Logging, Logs Explorer with the saved query (namespace finsecure, REJECTED): "2,248
 rejected transactions in the hour, and the histogram shows the same spike the alert fired on."
 
-## 8:30 Slide 7, AI use case (90 s)
+## 9:15 Slide 8, architecture and decisions (45 s)
+
+Stay on the slide. "This is the simplified map; the full one is Figure 1 in the design
+document. Follow the numbers: push, webhook, image to Docker Hub, kubectl apply, pull, requests
+through the LoadBalancer, scrape, alerts to Gmail, build emails, logs, and the AI watcher
+reading the same Prometheus. Four decisions on the right: Jenkins outside the cluster so the
+deployer is separate from what it deploys; a zonal cluster because the control plane is free
+and it pauses to near zero; Trivy twice with Actions as a mirror; Cloud Logging instead of
+Loki because loki-stack is deprecated. And one known limit, per-pod validator state. This is a
+demonstration deployment: everything is HTTP, and TLS and tighter access are production
+baselines, listed on the last slide."
+
+## 10:00 Slide 9, AI use case (90 s)
 
 "The AI use case is anomaly detection on the same Prometheus metrics the alerts use. The problem:
 threshold alerts only catch what I anticipated. An Isolation Forest over request rate, rejected
@@ -159,8 +180,11 @@ python3 ai/anomaly_watch.py --prometheus http://localhost:9090 --minutes 60
 ```
 
 Read the flagged windows aloud. Show `ai/anomaly_watch.png` on the slide.
+If asked why 148 windows and not 241: Prometheus returns no points where a rate has no
+samples, and the pods were replaced by builds #9 and #10 partway through the hour. One evening
+and one induced incident make this a proof of concept, not a measured detection advantage.
 
-## 10:00 Back to Jenkins: the live build has finished (60 s)
+## 11:30 Back to Jenkins: the live build has finished (60 s)
 
 Switch to Jenkins. The build started at 0:45 should be green. Show the Stage View, then:
 
@@ -173,27 +197,23 @@ kubectl -n finsecure rollout history deployment/finsecure-pay | tail -3
 below two ready, and the Kubernetes revision carries the Jenkins build number. That is the
 end-to-end path, live."
 
-## 11:00 Slide 8, test results and recovery (45 s)
+## 12:30 Slide 10, test results, lessons, future work, links (60 s)
 
-Walk the test table on the slide: 8 rows, each with the build number or screenshot that proves
-it. "Delete a pod, recreated in 35 seconds. Rollback, revision 5 is the old template re-applied."
-
-## 11:45 Slide 9, lessons learned and future work (45 s)
+Walk the test table: 9 rows, each with the build number or screenshot that proves it. "Delete a
+pod, recreated in 35 seconds. Rollback, revision 5 is the old template re-applied."
 
 "Four lessons. Security gates cost me a day on my own image before I ever reached the demo, and
 that is the point of having them. Named users break runAsNonRoot; use numeric ids. Spring Boot
 does not publish histogram buckets unless asked, so my p95 panel was empty until I fixed it
 through the pipeline. And a wrong Gmail app password fails silently from the alert's point of
 view; I only found it in Alertmanager's logs. Future work: a staging namespace with a promotion
-gate, Workload Identity instead of a VM service account, HTTPS with a managed certificate,
-Horizontal Pod Autoscaler, and the anomaly watcher as a CronJob with its own alert."
-
-## 12:30 Slide 10, links (15 s)
+gate; HTTPS and TLS everywhere; least-privilege IAM and RBAC for the Jenkins service account and
+rootless image builds; an autoscaler; and the anomaly watcher as a CronJob with its own alert."
 
 "Repository, Docker Hub image, evidence folder with every screenshot, and this recording.
 Thank you."
 
-Stop recording.
+Stop recording at about 13:30.
 
 ## After recording
 
@@ -211,7 +231,7 @@ PROJECT_ID=finsecure-pay-514214 scripts/gcp-teardown.sh
 
 - Build not started by webhook: use Build with Parameters. Say so; the webhook evidence is in
   the history.
-- Build still running at 10:00: show build #3 and #5 history instead and say the live one is
+- Build still running at 11:30: show build #3 and #5 history instead and say the live one is
   still in Deploy; cut back to it at the end if time allows.
 - Grafana empty: the warm-up load was skipped; run `scripts/load.sh http://35.197.154.237 60 20`
   during slide 4 and come back to it.

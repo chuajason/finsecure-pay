@@ -164,7 +164,7 @@ function stat(slide, big, label, x, y, w) {
   // 8 Architecture
   s = pres.addSlide({ masterName: 'CONTENT', sectionTitle: 'Operate' });
   s.addText('End-to-end architecture and the decisions behind it', { placeholder: 'title' });
-  await shot(s, 'docs/architecture.png', 0.6, 1.25, 9.3, 5.6, null);
+  await shot(s, 'docs/architecture-slide.png', 0.5, 1.25, 10.1, 5.6, null);
   const decisions = [['Jenkins outside the cluster', 'Deployer separate from what it deploys; VM pauses on its own; service account instead of key files'],
     ['Zonal GKE, 2 small nodes', 'Real LoadBalancer and Cloud Logging, free control plane, near-zero cost when paused'],
     ['Trivy twice, Actions as mirror', 'One policy, two engines; repository scan catches dependencies before an image exists'],
@@ -172,10 +172,10 @@ function stat(slide, big, label, x, y, w) {
     ['Known limit', 'Duplicate and velocity state is per pod; production needs Redis or a database']];
   decisions.forEach(([h, t], i) => {
     const y = 1.25 + i * 1.12;
-    s.addShape(pres.ShapeType.roundRect, { x: 10.1, y, w: 2.7, h: 1.0, fill: { color: C.background2 }, line: { color: C.background2 }, rectRadius: 0.08 });
-    s.addText([{ text: h, options: { bold: true, color: C.text2, breakLine: true } }, { text: t, options: { color: C.text1 } }], { x: 10.2, y: y + 0.05, w: 2.5, h: 0.9, fontSize: 10, valign: 'top', margin: 0, isTextBox: true });
+    s.addShape(pres.ShapeType.roundRect, { x: 10.75, y, w: 2.15, h: 1.0, fill: { color: C.background2 }, line: { color: C.background2 }, rectRadius: 0.08 });
+    s.addText([{ text: h, options: { bold: true, color: C.text2, breakLine: true } }, { text: t, options: { color: C.text1 } }], { x: 10.83, y: y + 0.05, w: 2.0, h: 0.9, fontSize: 9, valign: 'top', margin: 0, isTextBox: true });
   });
-  s.addNotes('Architecture. Numbered arrows follow one change from push to a monitored, alerting service. Full-resolution PNG and SVG are in docs/.');
+  s.addNotes('Architecture, simplified for the slide. Numbered arrows follow one change from push to a monitored, alerting service. The full diagram is Figure 1 in the design document and docs/architecture.png.');
 
   // 9 AI
   s = pres.addSlide({ masterName: 'CONTENT', sectionTitle: 'Operate' });
@@ -215,9 +215,9 @@ function stat(slide, big, label, x, y, w) {
     'runAsNonRoot needs a numeric uid; a named user gives CreateContainerConfigError',
     'Spring Boot publishes no histogram buckets unless asked; p95 was silently empty',
     'A wrong Gmail app password fails quietly; Alertmanager logs told the truth',
-    'Per-pod validator state is a real limit; note it, do not hide it'], 8.8, 1.7, 4.0, 2.9, 11);
-  s.addText('Future work', { x: 8.8, y: 4.55, w: 4.0, h: 0.35, fontSize: 15, bold: true, color: C.accent3, margin: 0, isTextBox: true });
-  bullets(s, ['Staging namespace with a promotion step', 'Workload Identity and HTTPS with a managed certificate', 'Horizontal Pod Autoscaler on request rate', 'Anomaly watcher as a CronJob with its own alert'], 8.8, 4.95, 4.0, 1.5, 11);
+    'Per-pod validator state is a real limit; note it, do not hide it'], 8.8, 1.7, 4.0, 2.6, 10.5);
+  s.addText('Future work', { x: 8.8, y: 4.3, w: 4.0, h: 0.35, fontSize: 15, bold: true, color: C.accent3, margin: 0, isTextBox: true });
+  bullets(s, ['Staging namespace with a promotion step', 'HTTPS with a managed certificate; TLS for Jenkins and Grafana', 'Least-privilege IAM and RBAC for the Jenkins service account; rootless image builds', 'HPA on request rate; anomaly watcher as a CronJob with its own alert'], 8.8, 4.7, 4.0, 1.6, 10.5);
   s.addText([
     { text: 'Repository and evidence: ', options: { bold: true } }, { text: REPO, options: { hyperlink: { url: REPO } } },
     { text: '   Design document: docs/FinSecure_Pay_Design_Document.docx   Demo script: docs/DEMO_SCRIPT.md   Recording: [link added at submission]', options: {} },

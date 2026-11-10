@@ -48,7 +48,7 @@ box("ALM", 1530, 560, 270, 110, "Alertmanager", ["route namespace=finsecure to e
 box("GRF", 1230, 720, 250, 90, "Grafana (LoadBalancer)", ["FinSecure Pay dashboard, 6 panels", "loaded from a ConfigMap"], pu)
 box("KSM", 1530, 720, 270, 90, "kube-state-metrics, node-exporter", ["replica counts, node and", "pod resource metrics"], pu)
 box("CL", 850, 930, 240, 110, "Cloud Logging (GKE agent)", ["container stdout, all pods", "Logs Explorer by namespace"], gy)
-box("AI", 1190, 930, 270, 110, "AI anomaly watcher", ["ai/anomaly_watch.py, Isolation Forest", "over req/s, rejected share, p95", "reads Prometheus query_range"], gy)
+box("AI", 1190, 930, 270, 110, "AI anomaly watcher (run by hand)", ["ai/anomaly_watch.py, Isolation Forest", "over req/s, rejected share, p95", "CronJob and alert: future work"], gy)
 box("GM", 1500, 930, 300, 110, "Gmail (jason.rockie@gmail.com)", ["Jenkins SUCCESS / FAILED emails", "Alertmanager FIRING / RESOLVED emails"], gy)
 
 A = []
@@ -64,7 +64,7 @@ arrow([(1090, 695), (1140, 695), (1140, 330), (1210, 330)], "5 image pull", (110
 arrow([(190, 130), (190, 95), (1635, 95), (1635, 230)], "6 HTTP requests (clients, load generator, Jenkins smoke test)", (700, 88))
 arrow([(1560, 280), (1530, 280)], "")
 arrow([(1330, 360), (1330, 380)], "")
-arrow([(1590, 360), (1590, 380)], "")
+arrow([(1500, 360), (1500, 380)], "")
 arrow([(1450, 560), (1450, 360)], "7 scrape /actuator/prometheus", (1460, 498), dashed=True)
 arrow([(1480, 615), (1530, 615)], "8 alert", (1483, 603))
 arrow([(1300, 670), (1300, 720)], "9 query", (1310, 703))
